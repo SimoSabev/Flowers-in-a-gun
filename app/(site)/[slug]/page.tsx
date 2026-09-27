@@ -94,7 +94,7 @@ async function PostView({ post }: { post: Post }) {
 
       {post.cover && post.coverIsFeatured && (
         <figure className="mx-auto mt-8 max-w-[1152px]">
-          <Cover image={post.cover} title={post.title} ratio={`${post.cover.width} / ${post.cover.height}`} priority fit="contain" className="max-h-[80vh] border-2 border-ink" />
+          <Cover image={post.cover} title={post.title} ratio={`${post.cover.width} / ${post.cover.height}`} priority fit="contain" sizes="(min-width: 1200px) 1152px, 100vw" className="max-h-[80vh] border-2 border-ink" />
         </figure>
       )}
 

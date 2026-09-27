@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "tsx scripts/make-derivatives.ts",
     "build": "next build",
     "postbuild": "tsx scripts/check-routes.ts",
     "start": "next start",
-    "lint": "tsc --noEmit",
-    "check-routes": "tsx scripts/check-routes.ts"
+    "typecheck": "tsc --noEmit",
+    "check-routes": "tsx scripts/check-routes.ts",
+    "derivatives": "tsx scripts/make-derivatives.ts"
   },
   "dependencies": {
     "@keystatic/core": "^0.6.9",
@@ -26,6 +28,7 @@
     "@types/node": "^26.6.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3"

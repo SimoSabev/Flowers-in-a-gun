@@ -13,6 +13,7 @@ export function Cover({
   className = '',
   titleSize = 'text-[26px]',
   fit = 'cover',
+  sizes = '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw',
 }: {
   image: LocalImage | null;
   title: string;
@@ -22,6 +23,8 @@ export function Cover({
   className?: string;
   titleSize?: string;
   fit?: 'cover' | 'contain';
+  /** Rendered width hint for srcset selection. Defaults to a grid card. */
+  sizes?: string;
 }) {
   if (!image) {
     return (
@@ -39,6 +42,8 @@ export function Cover({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={image.src}
+      srcSet={image.srcSet}
+      sizes={image.srcSet ? sizes : undefined}
       width={image.width}
       height={image.height}
       alt=""

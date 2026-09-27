@@ -9,7 +9,17 @@ import { imageSizeFromFile } from 'image-size/fromFile';
  * present ones get their intrinsic size so the browser can reserve space (no layout shift).
  */
 
-export type LocalImage = { src: string; width: number; height: number };
+export type LocalImage = {
+  src: string;
+  width: number;
+  height: number;
+  /** Resized copies (scripts/make-derivatives.ts) for oversized originals; absent otherwise. */
+  srcSet?: string;
+};
+
+/** Must match scripts/make-derivatives.ts. */
+const DERIVATIVE_WIDTHS = [640, 1280];
+const DERIVATIVE_MIN_SOURCE_WIDTH = 1400;
 
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
 const WP_SIZE_SUFFIX = /-(\d+)x(\d+)(\.[a-z0-9]+)$/i;
@@ -40,8 +50,13 @@ export function localImage(src: string): Promise<LocalImage | null> {
       const file = toFile(src);
       if (!file || !fs.existsSync(file)) return null;
       try {
-        const { width, height } = await imageSizeFromFile(file);
-        return width && height ? { src, width, height } : null;
+        const size = await imageSizeFromFile(file);
+        if (!size.width || !size.height) return null;
+        // EXIF orientations 5-8 are displayed rotated by 90°: swap so the reserved box matches.
+        const rotated = (size.orientation ?? 1) >= 5;
+        const width = rotated ? size.height : size.width;
+        const height = rotated ? size.width : size.height;
+        return withDerivatives({ src, width, height }, file);
       } catch {
         return null;
       }
@@ -49,6 +64,16 @@ export function localImage(src: string): Promise<LocalImage | null> {
     cache.set(src, hit);
   }
   return hit;
+}
+
+function withDerivatives(img: LocalImage, file: string): LocalImage {
+  if (img.width <= DERIVATIVE_MIN_SOURCE_WIDTH) return img;
+  const rel = path.relative(PUBLIC_DIR, file).split(path.sep).join('/');
+  const urls = DERIVATIVE_WIDTHS.filter((w) => fs.existsSync(path.join(PUBLIC_DIR, '_img', String(w), rel))).map(
+    (w) => [w, `/_img/${w}/${encodeURI(rel).replace(/\+/g, '%2B')}`] as const,
+  );
+  if (urls.length === 0) return img;
+  return { ...img, src: urls[urls.length - 1][1], srcSet: urls.map(([w, u]) => `${u} ${w}w`).join(', ') };
 }
 
 const dirCache = new Map<string, string[]>();

@@ -15,6 +15,8 @@ import { isLocalPath, localImage, type LocalImage } from './images';
 
 const OWN_HOSTS = new Set(['flowersinagun.com', 'www.flowersinagun.com']);
 const PULL_QUOTE_MAX_WORDS = 40;
+/** Body column is at most 680px wide. */
+const BODY_SIZES = '(min-width: 720px) 680px, 100vw';
 
 type Vars = { images: Record<string, LocalImage | null> };
 
@@ -49,7 +51,15 @@ const config: Config = {
         if (isLocalPath(src)) {
           const found = (cfg.variables as Vars).images[src];
           img = found
-            ? new Tag('img', { src, alt, width: found.width, height: found.height, loading: 'lazy', decoding: 'async' })
+            ? new Tag('img', {
+                src: found.src,
+                ...(found.srcSet ? { srcSet: found.srcSet, sizes: BODY_SIZES } : {}),
+                alt,
+                width: found.width,
+                height: found.height,
+                loading: 'lazy',
+                decoding: 'async',
+              })
             : null;
         } else {
           img = new Tag('ExternalImage', { src, alt });

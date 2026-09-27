@@ -67,6 +67,7 @@ export default async function Home() {
                   title={p.title}
                   category={p.primaryCategory?.name}
                   ratio="16 / 10"
+                  sizes="(min-width: 1024px) 40vw, 100vw"
                   className="border-2 border-ink"
                 />
                 <h3 className="mt-3 text-[18px] font-bold leading-snug group-hover:underline sm:text-[21px]">{p.title}</h3>
@@ -106,7 +107,7 @@ function Hero({ post }: { post: Post }) {
   return (
     <section aria-labelledby="hero" className="mt-8 grid gap-6 lg:mt-11 lg:grid-cols-12 lg:items-center lg:gap-6">
       <Link href={post.path} className="block lg:col-span-8" tabIndex={-1} aria-hidden="true">
-        <Cover image={post.cover} title={post.title} ratio="3 / 2" priority className="border-2 border-ink" />
+        <Cover image={post.cover} title={post.title} ratio="3 / 2" priority sizes="(min-width: 1024px) 66vw, 100vw" className="border-2 border-ink" />
       </Link>
       <div className="lg:col-span-4">
         <div className="flex flex-wrap items-center gap-3">
