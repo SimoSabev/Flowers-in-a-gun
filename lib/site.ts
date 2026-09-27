@@ -1,0 +1,43 @@
+/** Site-wide constants. Everything that depends on the environment is read here, once. */
+
+export const SITE_NAME = 'Flowers in a Gun';
+export const SITE_TAGLINE = 'Music journalism · New York and beyond · Since 2012';
+export const SITE_DESCRIPTION =
+  'Flowers in a Gun: concert reviews, interviews and records from New York and beyond, founded by Mart Kawaii.';
+
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.flowersinagun.com').replace(/\/+$/, '');
+export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL || '';
+export const ADS_ENABLED = process.env.NEXT_PUBLIC_ADS_ENABLED === 'true';
+export const INSTAGRAM_URL = 'https://www.instagram.com/flowersinagun/';
+
+/** Posts per page on every paginated listing (home archive, category, tag, author). */
+export const PAGE_SIZE = 12;
+
+/** Main navigation. Category slugs are the original WordPress ones (see DESIGN.md "Category → nav mapping"). */
+export const NAV = [
+  { label: 'Live', href: '/category/concert-reviews-more/', category: 'concert-reviews-more' },
+  { label: 'Jazz', href: '/category/jazz-2/', category: 'jazz-2' },
+  { label: 'Rock/Metal', href: '/category/rockalternative/', category: 'rockalternative' },
+  { label: 'Experimental', href: '/category/avant-gardeexperimental/', category: 'avant-gardeexperimental' },
+  { label: 'Band of the Week', href: '/category/band-of-the-week-2/', category: 'band-of-the-week-2' },
+  { label: 'About', href: '/about/' },
+] as const;
+
+export const CATEGORY = {
+  live: 'concert-reviews-more',
+  jazz: 'jazz-2',
+  rock: 'rockalternative',
+  experimental: 'avant-gardeexperimental',
+  bandOfTheWeek: 'band-of-the-week-2',
+} as const;
+
+export const HALL_OF_FAME_PATH = '/band-of-the-week-hall-of-fame/';
+
+export function mailto(subject: string): string | null {
+  return CONTACT_EMAIL ? `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}` : null;
+}
+
+/** Absolute canonical URL for a site path ("/foo/" -> "https://www.flowersinagun.com/foo/"). */
+export function absoluteUrl(path: string): string {
+  return SITE_URL + (path.startsWith('/') ? path : `/${path}`);
+}

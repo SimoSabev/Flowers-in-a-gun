@@ -51,6 +51,13 @@ export default config({
           label: 'Tags', itemLabel: (p) => p.value ?? '',
         }),
         featuredImage: fields.text({ label: 'Featured image path' }),
+        // Optional display fields added for the site design; empty = derived automatically.
+        venue: fields.text({ label: 'Venue (shown on cards, optional)' }),
+        excerpt: fields.text({
+          label: 'Excerpt (optional)',
+          description: 'Leave empty to use the first ~30 words of the post.',
+          multiline: true,
+        }),
         content,
         // --- archive metadata (kept for redirects / provenance) ---
         wpId: fields.integer({ label: 'Original WordPress ID' }),
