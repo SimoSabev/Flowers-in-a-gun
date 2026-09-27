@@ -40,10 +40,30 @@ function toFile(src: string): string | null {
   return file.startsWith(PUBLIC_DIR + path.sep) ? file : null;
 }
 
-/** Whether a site path ("/wp-content/uploads/…") exists under public/. */
-export function publicFileExists(src: string): boolean {
+/**
+ * Whether a site path ("/wp-content/uploads/…") is a real audio/video file under public/.
+ * Checks the file's signature, not just its name: a failed Wayback download saved as .mp4 is an
+ * HTML page, and must not become a broken player.
+ */
+export function publicMediaExists(src: string): boolean {
   const file = isLocalPath(src) ? toFile(src) : null;
-  return !!file && fs.existsSync(file);
+  if (!file || !fs.existsSync(file)) return false;
+  const head = Buffer.alloc(12);
+  const fd = fs.openSync(file, 'r');
+  try {
+    fs.readSync(fd, head, 0, 12, 0);
+  } finally {
+    fs.closeSync(fd);
+  }
+  const ascii = (from: number, to: number) => head.toString('latin1', from, to);
+  return (
+    ascii(4, 8) === 'ftyp' || // MP4, MOV, M4A
+    head.readUInt32BE(0) === 0x1a45dfa3 || // WebM / Matroska
+    ascii(0, 4) === 'OggS' ||
+    ascii(0, 4) === 'RIFF' || // WAV
+    ascii(0, 3) === 'ID3' ||
+    (head[0] === 0xff && (head[1] & 0xe0) === 0xe0) // MP3 frame
+  );
 }
 
 const cache = new Map<string, Promise<LocalImage | null>>();
