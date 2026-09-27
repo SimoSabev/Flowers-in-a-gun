@@ -1,0 +1,33 @@
+{
+  "original_url": "http://www.flowersinagun.com:80/wine-cheese-meow-meow/",
+  "path": "/wine-cheese-meow-meow/",
+  "slug": "wine-cheese-meow-meow",
+  "key": "flowersinagun.com/wine-cheese-meow-meow",
+  "wp_id": 630,
+  "kind": "article",
+  "title": "Wine & Cheese &… Meow-meow",
+  "date": "2012-04-12",
+  "author": "Mart Kawaii",
+  "author_slug": "admin",
+  "categories": [
+    "Even more music",
+    "Selected from the Net"
+  ],
+  "tags": [],
+  "terms": {
+    "category": {
+      "Even more music": "loud-music",
+      "Selected from the Net": "abuse-the-net"
+    },
+    "post_tag": {}
+  },
+  "featured_image": "",
+  "body_html": "<p>[soundcloud url=\"http://api.soundcloud.com/tracks/42375843\" iframe=\"true\" /]</p>\n<p>Listen to samples of my meowice… I mean voice in this rad DJ set by the DirtyNerdy crew.</p>\n<p>SWISHERHANDS<br/>\nETHER EDEN<br/>\nGORDON GARTRELL<br/>\nDJ PETER PIPER</p>\n<p>Recorded in the Brooklyn boutique LIVE ASTRO.</p>\n<p>Samples taken in my basement…</p>\n<p>Special attention to 44:35, please!</p>",
+  "word_count": 47,
+  "images": [],
+  "embeds": [],
+  "comments": [],
+  "snapshot_ts": "20131001033112",
+  "injected_snapshot": false,
+  "generator": "WordPress 3.6.1"
+}

@@ -1,0 +1,37 @@
+{
+  "original_url": "http://www.flowersinagun.com:80/im-having-a-great-time-in-sofia/",
+  "path": "/im-having-a-great-time-in-sofia/",
+  "slug": "im-having-a-great-time-in-sofia",
+  "key": "flowersinagun.com/im-having-a-great-time-in-sofia",
+  "wp_id": 1224,
+  "kind": "article",
+  "title": "I’m having a great time in Sofia",
+  "date": "2012-09-01",
+  "author": "Mart Kawaii",
+  "author_slug": "admin",
+  "categories": [
+    "Even more music",
+    "Photography"
+  ],
+  "tags": [],
+  "terms": {
+    "category": {
+      "Even more music": "loud-music",
+      "Photography": "photography"
+    },
+    "post_tag": {}
+  },
+  "featured_image": "http://www.flowersinagun.com/wp-content/uploads/2012/09/http-__makeagif.com_media_9-01-2012_Ag9TJM-150x150.gif",
+  "body_html": "<p>Yes, yes… it’s good to be back, even for a little bit. I’m sharing with you this GIF from the Brit Pop party @ Radio Cafe yesterday… def stop by to check it out if you’re visiting Sofia. Good times. Hell yeah!</p>\n<p><a href=\"http://www.flowersinthebarrelofagun.com/wp-content/uploads/2012/09/http-__makeagif.com_media_9-01-2012_Ag9TJM.gif\"><img alt=\"\" class=\"alignnone size-full wp-image-1225\" height=\"600\" src=\"http://www.flowersinthebarrelofagun.com/wp-content/uploads/2012/09/http-__makeagif.com_media_9-01-2012_Ag9TJM.gif\" title=\"http-__makeagif.com_media_9-01-2012_Ag9TJM\" width=\"900\"/></a></p>\n<p> </p>\n<p><iframe frameborder=\"0\" height=\"315\" src=\"http://www.youtube.com/embed/S0DRch3YLh0\" width=\"420\"></iframe></p>",
+  "word_count": 42,
+  "images": [
+    "http://www.flowersinthebarrelofagun.com/wp-content/uploads/2012/09/http-__makeagif.com_media_9-01-2012_Ag9TJM.gif"
+  ],
+  "embeds": [
+    "http://www.youtube.com/embed/S0DRch3YLh0"
+  ],
+  "comments": [],
+  "snapshot_ts": "20131114003138",
+  "injected_snapshot": false,
+  "generator": "WordPress 3.7.1"
+}

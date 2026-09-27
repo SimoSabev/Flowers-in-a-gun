@@ -1,0 +1,30 @@
+Captures (200 OK): 7190
+Unique URLs:       2911
+
+By type:
+  image            1524
+  theme_asset      452
+  noise            383
+  listing          244
+  article_or_page  184
+  legacy_page      113
+  home             5
+  other_file       2
+  other_html       2
+  shortlink        2
+
+Captures per year (check when parked/expired pages start):
+  2012: 91
+  2013: 428
+  2014: 505
+  2015: 1135
+  2016: 826
+  2017: 422
+  2018: 785
+  2019: 801
+  2020: 85
+  2021: 334
+  2022: 120
+  2023: 1517
+  2024: 122
+  2025: 19

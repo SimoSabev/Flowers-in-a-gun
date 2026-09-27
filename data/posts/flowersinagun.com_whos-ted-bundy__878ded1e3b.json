@@ -1,0 +1,42 @@
+{
+  "original_url": "http://www.flowersinagun.com:80/whos-ted-bundy/",
+  "path": "/whos-ted-bundy/",
+  "slug": "whos-ted-bundy",
+  "key": "flowersinagun.com/whos-ted-bundy",
+  "wp_id": 2214,
+  "kind": "article",
+  "title": "Who’s Ted Bundy?",
+  "date": "2013-03-09",
+  "author": "Mart Kawaii",
+  "author_slug": "admin",
+  "categories": [
+    "Movies"
+  ],
+  "tags": [
+    "american psycho",
+    "gifs",
+    "ted bundy"
+  ],
+  "terms": {
+    "category": {
+      "Movies": "scary-movies"
+    },
+    "post_tag": {
+      "american psycho": "american-psycho",
+      "gifs": "gifs",
+      "ted bundy": "ted-bundy"
+    }
+  },
+  "featured_image": "https://www.flowersinagun.com/wp-content/uploads/2013/03/f.jpeg",
+  "body_html": "<p><img alt=\"\" class=\"alignnone\" height=\"283\" src=\"http://25.media.tumblr.com/5abdd4336d591370f24d97636b030c56/tumblr_mjdjz5Bkf81r06aqmo1_500.gif\" width=\"500\"/></p>\n<p>via Punky Jones on Facebook.</p>\n<div class=\"wp-caption alignnone\" style=\"width: 634px\"><img alt=\"\" height=\"480\" src=\"http://2.bp.blogspot.com/-3zYHM2AxThU/UGt5um2x04I/AAAAAAAAEto/FxkY_70zlDU/s1600/f.jpeg\" title=\"Ted Bundy gives you high five!\" width=\"624\"/><p class=\"wp-caption-text\">Ted Bundy gives you high five!</p></div>",
+  "word_count": 11,
+  "images": [
+    "http://25.media.tumblr.com/5abdd4336d591370f24d97636b030c56/tumblr_mjdjz5Bkf81r06aqmo1_500.gif",
+    "http://2.bp.blogspot.com/-3zYHM2AxThU/UGt5um2x04I/AAAAAAAAEto/FxkY_70zlDU/s1600/f.jpeg"
+  ],
+  "embeds": [],
+  "comments": [],
+  "snapshot_ts": "20200222004832",
+  "injected_snapshot": true,
+  "generator": "WordPress 4.9.13"
+}

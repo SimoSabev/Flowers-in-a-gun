@@ -1,0 +1,47 @@
+{
+  "original_url": "http://www.flowersinagun.com:80/short-movie-bum-luck/",
+  "path": "/short-movie-bum-luck/",
+  "slug": "short-movie-bum-luck",
+  "key": "flowersinagun.com/short-movie-bum-luck",
+  "wp_id": 3308,
+  "kind": "article",
+  "title": "Short Movie: Bum Luck",
+  "date": "2013-10-31",
+  "author": "Mart Kawaii",
+  "author_slug": "admin",
+  "categories": [
+    "Movies"
+  ],
+  "tags": [
+    "bum luck",
+    "indie cinema",
+    "john rambo",
+    "new york city indie",
+    "short movie"
+  ],
+  "terms": {
+    "category": {
+      "Movies": "scary-movies"
+    },
+    "post_tag": {
+      "bum luck": "bum-luck",
+      "indie cinema": "indie-cinema",
+      "john rambo": "john-rambo",
+      "new york city indie": "new-york-city-indie",
+      "short movie": "short-movie"
+    }
+  },
+  "featured_image": "http://www.flowersinagun.com/wp-content/uploads/2013/10/maxresdefault.jpg",
+  "body_html": "<p>The story about the bum who finds a black suitcase full of money already turned itself into a city legend. Watch a sleek, indie interpretation of it in John Rambo’s short movie “Bum Luck”.</p>\n<p><iframe allowfullscreen=\"\" frameborder=\"0\" height=\"315\" src=\"//www.youtube.com/embed/SWYv90O7_OU\" width=\"560\"></iframe></p>\n<p>Starring my friend William Rivera as the main character.</p>\n<p><a href=\"http://www.flowersinagun.com/wp-content/uploads/2013/10/maxresdefault.jpg\"><img alt=\"maxresdefault\" class=\"alignnone size-large wp-image-3309\" height=\"247\" src=\"http://www.flowersinagun.com/wp-content/uploads/2013/10/maxresdefault-1024x576.jpg\" width=\"440\"/></a></p>",
+  "word_count": 43,
+  "images": [
+    "http://www.flowersinagun.com/wp-content/uploads/2013/10/maxresdefault-1024x576.jpg"
+  ],
+  "embeds": [
+    "http://www.youtube.com/embed/SWYv90O7_OU"
+  ],
+  "comments": [],
+  "snapshot_ts": "20131114003158",
+  "injected_snapshot": false,
+  "generator": "WordPress 3.7.1"
+}

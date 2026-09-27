@@ -1,0 +1,13 @@
+Posts: 179, pages: 4, authors: 15, categories: 23, tags: 756, comments: 46
+Images copied to build/wp-content/uploads: 1483 new (1486 available); unresolved references: 1556
+Redirect rules: 117 specific + host/legacy rules
+
+Import steps (fresh WordPress):
+  1. Settings -> Permalinks -> Custom: /%postname%/   (matches the original)
+  2. Upload build/wp-content/uploads/* to wp-content/uploads/ (SFTP) BEFORE importing
+  3. Tools -> Import -> WordPress -> flowersinagun.wxr.xml
+     map authors to new users; leave 'Download and import file attachments' UNTICKED
+  4. Optional, to fill the Media Library in place (WP-CLI):
+     wp media import wp-content/uploads/20*/*/* --skip-copy
+  5. Paste build/htaccess-redirects.txt above '# BEGIN WordPress'
+  6. python 05_verify.py --base https://www.flowersinagun.com

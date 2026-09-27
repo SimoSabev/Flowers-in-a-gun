@@ -1,0 +1,49 @@
+{
+  "original_url": "http://www.flowersinagun.com:80/interview-mndr/",
+  "path": "/interview-mndr/",
+  "slug": "interview-mndr",
+  "key": "flowersinagun.com/interview-mndr",
+  "wp_id": 4111,
+  "kind": "article",
+  "title": "Interview with MNDR @ Brooklyn Night Bazaar",
+  "date": "2014-01-25",
+  "author": "Mart Kawaii",
+  "author_slug": "admin",
+  "categories": [
+    "Electronica"
+  ],
+  "tags": [
+    "brooklyn night bazaar",
+    "feed me diamonds",
+    "kylie minogue",
+    "mark ronson",
+    "mndr",
+    "mndr brooklyn night bazaar",
+    "sean paul"
+  ],
+  "terms": {
+    "category": {
+      "Electronica": "electronica-2"
+    },
+    "post_tag": {
+      "brooklyn night bazaar": "brooklyn-night-bazaar",
+      "feed me diamonds": "feed-me-diamonds",
+      "kylie minogue": "kylie-minogue",
+      "mark ronson": "mark-ronson",
+      "mndr": "mndr",
+      "mndr brooklyn night bazaar": "mndr-brooklyn-night-bazaar",
+      "sean paul": "sean-paul"
+    }
+  },
+  "featured_image": "http://www.flowersinagun.com/wp-content/uploads/2014/01/IMG_0659.jpg",
+  "body_html": "<p><iframe allowfullscreen=\"\" frameborder=\"0\" height=\"248\" src=\"//www.youtube.com/embed/aJ0EtLbAkbU\" style=\"letter-spacing: 0.05em; line-height: 1.6875;\" width=\"440\"></iframe></p>\n<p>Amanda Warner, better known as MNDR – the face and the voice of the studio project with Peter Wade, that ruled 2013 with songs like “Feed me diamonds” and “Bang Bang Bang” feat. Mark Ronson – kicked ass at Brooklyn Night Bazaar with bouncy indietronica set.</p>\n<p>We were there to film it, speak to Amanda right before the show (and dance in the mean time). Here is the result – 8 minutes of HD video, in which she speaks about her inspirations, the music she played as a DJ and her upcoming projects with Kylie Minogue, Sean Paul and “may be” Mark Ronson again.</p>\n<p>Enjoy!</p>",
+  "word_count": 105,
+  "images": [],
+  "embeds": [
+    "http://www.youtube.com/embed/aJ0EtLbAkbU"
+  ],
+  "comments": [],
+  "snapshot_ts": "20140204053403",
+  "injected_snapshot": false,
+  "generator": "WordPress 3.7.1"
+}

@@ -1,0 +1,14 @@
+posts: 180, pages: 4, authors: 15, categories: 23, tags: 756
+images: 1486 available (329 newly copied); references resolved: exact: 439, other_size: 238, original: 8; unresolved: 824
+posts with missing photos: 85 -> missing_photos_for_martina.csv
+redirects: 186
+
+Wiring (Next.js App Router):
+  npm i @keystatic/core @keystatic/next @markdoc/markdoc
+  next.config.mjs:  import redirects from './redirects.mjs';
+                    export default { trailingSlash: true, async redirects() { return redirects; } }
+  routes: app/[slug]/page.tsx        -> posts, then pages (same URL space, like WordPress)
+          app/category/[slug]/, app/tag/[slug]/, app/author/[slug]/ (+ /page/[n]/ if you paginate)
+  render: Markdoc.transform(await entry.content(), { tags: { embed: {...} } }) -> <Embed/> component
+  images: plain <img> (next/image optimisation quota is small on Hobby); files stay in public/
+  verify: python 05_verify.py --base https://<preview>.vercel.app --no-variants
