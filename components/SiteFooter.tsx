@@ -12,7 +12,10 @@ export async function SiteFooter() {
       <div className="wrap py-14">
         <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
           <div className="max-w-xs">
-            <Logo inverted />
+            {/* The logo is black-on-white by design: give it a white plate on the ink footer. */}
+            <div className="inline-block bg-surface p-3">
+              <Logo variant="compact" className="h-[56px]" />
+            </div>
             <p className="mt-4 text-[15px] text-white/80">Founded by Mart Kawaii.</p>
             <ul className="label mt-6 flex flex-wrap gap-x-5 gap-y-3">
               <li><Link href="/about/" className="hover:text-lime">About</Link></li>

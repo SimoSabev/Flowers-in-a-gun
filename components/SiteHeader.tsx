@@ -26,26 +26,11 @@ export function SiteHeader() {
 
   return (
     <header className="border-b-2 border-ink bg-surface">
-      <div className="wrap flex h-[72px] items-center justify-between gap-6 lg:h-[90px]">
-        <Logo />
-        <nav aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-7">
-            {NAV.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                  className="label py-2 text-[13px] text-ink decoration-lime decoration-4 underline-offset-8 hover:underline aria-[current=page]:underline"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+      <div className="wrap flex items-center justify-between gap-4 py-3 lg:py-5">
+        <Logo className="h-[60px] sm:h-[68px] lg:h-[90px] xl:h-[112px]" />
         <button
           type="button"
-          className="flex h-11 w-11 items-center justify-center border-2 border-ink bg-surface lg:hidden"
+          className="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-ink bg-surface lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label="Open menu"
@@ -56,6 +41,21 @@ export function SiteHeader() {
           </svg>
         </button>
       </div>
+      <nav aria-label="Main" className="hidden border-t border-rule-soft lg:block">
+        <ul className="wrap flex h-12 items-center gap-8">
+          {NAV.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                className="label py-2 text-[13px] text-ink decoration-lime decoration-4 underline-offset-8 hover:underline aria-[current=page]:underline"
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       {open && (
         <div
@@ -65,19 +65,21 @@ export function SiteHeader() {
           aria-label="Menu"
           className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-ink text-white lg:hidden"
         >
-          <div className="wrap flex h-[72px] shrink-0 items-center justify-between">
-            <Logo inverted />
-            <button
-              type="button"
-              className="flex h-11 w-11 items-center justify-center border-2 border-white"
-              aria-label="Close menu"
-              onClick={() => setOpen(false)}
-              autoFocus
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" strokeWidth="2" />
-              </svg>
-            </button>
+          <div className="shrink-0 border-b-2 border-ink bg-surface">
+            <div className="wrap flex items-center justify-between gap-4 py-3">
+              <Logo variant="compact" className="h-[60px] sm:h-[68px]" />
+              <button
+                type="button"
+                className="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-ink text-ink"
+                aria-label="Close menu"
+                onClick={() => setOpen(false)}
+                autoFocus
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" strokeWidth="2" />
+                </svg>
+              </button>
+            </div>
           </div>
           <nav aria-label="Main" className="wrap mt-8 pb-12">
             <ul className="flex flex-col gap-3">

@@ -6,7 +6,7 @@ import { ArchivedComments } from '@/components/ArchivedComments';
 import { Cover } from '@/components/Cover';
 import { PostCard } from '@/components/PostCard';
 import { SectionHeader } from '@/components/SectionHeader';
-import { getEntry, getPages, getPosts, getPostsFor, type Page, type Post } from '@/lib/content';
+import { getEntry, getPages, getPosts, getPostsFor, localImage, type Page, type Post } from '@/lib/content';
 import { formatDate } from '@/lib/format';
 import { safeDecode } from '@/lib/listing';
 import { renderMarkdoc } from '@/lib/markdoc';
@@ -174,14 +174,33 @@ function AuthorBox({ post }: { post: Post }) {
   );
 }
 
+/** The blog's first header (2013), shown on the About page as a piece of its history. */
+const ORIGINAL_2013_HEADER = '/wp-content/uploads/2013/09/flowers_in_a_barrel_12.jpg';
+
 async function PageView({ page }: { page: Page }) {
-  const body = await renderMarkdoc(await page.body());
+  const [body, header2013] = await Promise.all([
+    page.body().then(renderMarkdoc),
+    page.slug === 'about' ? localImage(ORIGINAL_2013_HEADER) : Promise.resolve(null),
+  ]);
   return (
     <article className="wrap">
       <header className="mx-auto mt-8 max-w-[680px] lg:mt-12">
         <h1 className="display text-[40px] sm:text-[52px] lg:text-[64px]">{page.title}</h1>
       </header>
       <div className="prose mx-auto mt-8 max-w-[680px]">{body}</div>
+      {header2013 && (
+        <figure className="mx-auto mt-12 max-w-[1152px]">
+          <Cover
+            image={header2013}
+            title="The original 2013 header"
+            ratio={`${header2013.width} / ${header2013.height}`}
+            sizes="(min-width: 1200px) 1152px, 100vw"
+            className="border-2 border-ink"
+            alt="The original 2013 Flowers in a Gun header"
+          />
+          <figcaption className="label mt-3 text-muted">The original 2013 header</figcaption>
+        </figure>
+      )}
     </article>
   );
 }
