@@ -1,13 +1,15 @@
 import { config, collection, fields } from '@keystatic/core';
 import { block } from '@keystatic/core/content-components';
 
-// Local editing in dev; GitHub mode in production (Keystatic GitHub App, see keystatic.com/docs/github-mode)
+// Local editing in dev; GitHub mode in production (Keystatic GitHub App, see README.md).
+// NEXT_PUBLIC_ because this file also runs in the browser (the /keystatic editor).
+// NEXT_PUBLIC_KEYSTATIC_STORAGE=github forces GitHub mode in dev, needed once to create the GitHub App.
 const storage =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE !== 'github'
     ? ({ kind: 'local' } as const)
     : ({
         kind: 'github',
-        repo: (process.env.KEYSTATIC_GITHUB_REPO ?? 'SimoSabev/Flowers-in-a-gun') as `${string}/${string}`,
+        repo: (process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_REPO ?? 'SimoSabev/Flowers-in-a-gun') as `${string}/${string}`,
       } as const);
 
 const content = fields.markdoc({
