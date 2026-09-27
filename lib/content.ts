@@ -30,6 +30,8 @@ export type Post = {
   venue: string | null;
   excerpt: string;
   cover: LocalImage | null;
+  /** True when `cover` is the post's own featured image (vs. borrowed from the body). */
+  coverIsFeatured: boolean;
   wpId: number | null;
   originalUrl: string | null;
   comments: Comment[];
@@ -80,23 +82,27 @@ function excerptOf(doc: Node): string {
  * Card/hero image: the featured image (upgraded from a WordPress thumbnail to a larger surviving
  * size when possible), else the first surviving body image, else null (typographic fallback).
  */
-async function coverOf(featured: string | null | undefined, doc: Node): Promise<LocalImage | null> {
+async function coverOf(
+  featured: string | null | undefined,
+  doc: Node,
+): Promise<{ cover: LocalImage | null; coverIsFeatured: boolean }> {
   const candidates: string[] = [];
   if (featured && isLocalPath(featured)) candidates.push(featured);
+  const featuredIndex = candidates.length ? 0 : -1;
   for (const n of doc.walk()) {
     if (n.type === 'image' && typeof n.attributes.src === 'string' && isLocalPath(n.attributes.src)) {
       candidates.push(n.attributes.src);
     }
   }
-  let small: LocalImage | null = null;
-  for (const src of candidates) {
+  let small: { cover: LocalImage; coverIsFeatured: boolean } | null = null;
+  for (const [i, src] of candidates.entries()) {
     const img = await bestVariant(src, COVER_MIN_WIDTH);
     if (!img) continue;
-    if (img.width >= COVER_MIN_WIDTH) return img;
-    small ??= img;
+    if (img.width >= COVER_MIN_WIDTH) return { cover: img, coverIsFeatured: i === featuredIndex };
+    small ??= { cover: img, coverIsFeatured: i === featuredIndex };
   }
   // A small image beats no image only if it is at least card-sized.
-  return small && small.width >= 300 ? small : null;
+  return small && small.cover.width >= 300 ? small : { cover: null, coverIsFeatured: false };
 }
 
 const byDateDesc = (a: Post, b: Post) => (a.date === b.date ? a.slug.localeCompare(b.slug) : a.date < b.date ? 1 : -1);
@@ -150,7 +156,7 @@ async function load(): Promise<Store> {
         tags: entry.tags.filter((t): t is string => !!t).map((t) => lookup(tags, t, 'tag', slug)),
         venue: entry.venue.trim() || null,
         excerpt: entry.excerpt.trim() || excerptOf(node),
-        cover: await coverOf(entry.featuredImage, node),
+        ...(await coverOf(entry.featuredImage, node)),
         wpId: entry.wpId ?? null,
         originalUrl: entry.originalUrl || null,
         comments: entry.comments.map((c) => ({ author: c.author, date: c.date, text: c.text })),
@@ -169,7 +175,7 @@ async function load(): Promise<Store> {
         path: `/${slug}/`,
         title: entry.title,
         excerpt: excerptOf(node),
-        cover: await coverOf(entry.featuredImage, node),
+        cover: (await coverOf(entry.featuredImage, node)).cover,
         wpId: entry.wpId ?? null,
         originalUrl: entry.originalUrl || null,
         body: async () => (await entry.content()).node,
