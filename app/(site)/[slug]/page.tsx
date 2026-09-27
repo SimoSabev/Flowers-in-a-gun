@@ -201,6 +201,11 @@ async function PageView({ page }: { page: Page }) {
           <figcaption className="label mt-3 text-muted">The original 2013 header</figcaption>
         </figure>
       )}
+      {page.comments.length > 0 && (
+        <div className="mx-auto max-w-[680px]">
+          <ArchivedComments comments={page.comments} />
+        </div>
+      )}
     </article>
   );
 }
