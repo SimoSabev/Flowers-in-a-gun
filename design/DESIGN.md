@@ -13,7 +13,7 @@ A clean, light, confident music magazine: hard black rules, square corners, big 
 | `--ink` | `#0D0D0C` | text, 2px rules, primary buttons, top bar, footer |
 | `--muted` | `#5C5B55` | meta text (dates, venues, bylines) |
 | `--rule-soft` | `#D9D8D0` | 1px dividers inside lists |
-| `--lime` | `#D8FF3C` | accent **fills only**: tags, highlight blocks, Band of the Week, logo dot, focus ring |
+| `--lime` | `#D8FF3C` | accent **fills only**: tags, highlight blocks, Band of the Week, focus ring |
 | `--green-text` | `#3D5A00` | links and accent text on light backgrounds (7:1 contrast) |
 
 Rules:
@@ -23,7 +23,7 @@ Rules:
 - Structural borders are `2px solid var(--ink)`; soft list dividers are `1px var(--rule-soft)`.
 
 ## Type
-- Display: **Anton**, uppercase, `font-weight: 400`. Only for the logo, H1, H2 and big section banners. Line-height 0.95–1.
+- Display: **Anton**, uppercase, `font-weight: 400`. Only for H1, H2 and big section banners. Line-height 0.95–1.
 - Text/UI: **Archivo** 400/500/600/700.
 - Scale (desktop → mobile): H1 hero 60 → 38; H1 article 64 → 40; H2 section 40 → 30; card title 20–22 → 18; body 18 → 17 with line-height 1.65; meta and labels 12–14, uppercase, letter-spacing 0.08–0.12em, weight 700.
 - Article body width: max 680px.
@@ -35,7 +35,7 @@ Rules:
 
 ## Components
 - **Top bar** (ink, 12px uppercase): tagline left; Instagram / Advertise / Newsletter right (Newsletter in lime). Hidden on phones. Links: Instagram → `https://www.instagram.com/flowersinagun/`; Advertise → `mailto:` from `NEXT_PUBLIC_CONTACT_EMAIL`; Newsletter → hide until a newsletter exists. "Contributors" (footer) → a generated `/contributors/` page listing all authors with post counts.
-- **Header** (white, 2px ink bottom border): Anton logo "FLOWERS IN A GUN" + lime square dot; nav: Live, Jazz, Rock/Metal, Experimental, Band of the Week, About. On phones: logo + 44×44 menu button opening a full-screen ink panel with the nav in Anton.
+- **Header** (white, 2px ink bottom border): Martina's original 2014–2018 logo (black gun barrel, "flowersinagun" with red "in", daisies), recreated as SVG in `public/brand/` (`design/logo/`); the full lockup with tagline from 1024px, the compact one below. It replaces the earlier Anton wordmark, at Martina's request. Nav row under the logo: Live, Jazz, Rock/Metal, Experimental, Band of the Week, About. On phones: compact logo + 44×44 menu button opening a full-screen ink panel with the nav in Anton. Favicon: the big daisy.
 - **Category → nav mapping**: Live = `concert-reviews-more`; Jazz = `jazz-2`; Rock/Metal = `rockalternative`; Experimental = `avant-gardeexperimental`; Band of the Week = `band-of-the-week-2` (plus the Hall of Fame page). All 23 categories stay reachable at `/category/<slug>/` and are listed in the footer.
 - **Tag pill**: lime fill, 2px ink border, 12px uppercase bold. Used for the primary category on the hero and article.
 - **Post card**: white, 2px ink border, image 16:10 with 2px ink bottom border, venue/category label in `--green-text`, title 20px bold. Hover: title underline + lime 4px bar on the card top. Whole card is one link.
