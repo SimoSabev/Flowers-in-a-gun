@@ -1,4 +1,4 @@
-# STATUS: site-v1
+# STATUS
 
 ## Done
 - **Repo layout** as `CLAUDE.md` describes: the exported site (`content/`, `public/`, `keystatic.config.ts`, `redirects.*`) moved from `build/site/` to the root. The recovery pipeline and its data moved to `tools/verify/`. `build/` was dropped: it held WordPress-variant leftovers and a duplicate of `public/wp-content`, is regenerable, and is gitignored. Junk post `content/posts/-a href=.mdoc` deleted.
@@ -11,7 +11,7 @@
 - **Rendering**:
   - Every local image is checked on disk at build time. Missing ones are dropped and present ones get width/height. Measured layout shift is 0 on the home page, a long photo post and a listing, with ads on and off.
   - Hot-linked external images remove themselves if they fail to load.
-  - Embeds: iframes for YouTube, Vimeo, SoundCloud, Bandcamp, Spotify and Mixcloud, only from those providers' own hosts; plain links otherwise (MySpace, Instagram).
+  - Embeds: iframes for YouTube, Vimeo, SoundCloud, Bandcamp, Spotify and Mixcloud, only from those providers' own hosts. Instagram posts render as caption cards; anything else (MySpace) becomes a plain link.
   - No raw HTML is rendered, and the archived comments are read-only.
 - **Images**: 244 resized copies (640 and 1280px) of the ~120 camera originals wider than 1400px are generated at build time into gitignored `public/_img/` and used through `srcset`. The hero went from 4.3 MB to 56 KB. Originals are untouched.
 - **Design** ("Stage, light"): all templates are built: home, article, page, category/tag/author, contributors, 404, mobile menu.
@@ -23,7 +23,21 @@
   - Optional `venue` and `excerpt` fields were added for the design.
   - In production the editor API answers 503 until the GitHub App env vars exist, so preview builds don't need them.
 
+### Round 2: logo, comments, text check
+- **Logo**: the 2014–2018 logo (`cropped-header22.jpg`) is rebuilt as clean SVG on the original's 1254×127 grid. The daisies are fitted to the original pixels; the text is outlined from Source Sans 3 because the original Myriad can't be embedded. Files in `public/brand/`: full and compact versions, each with red "in" (the original) or lime "in". Switch with `LOGO_IN_COLOR` in `lib/site.ts`; it is **red for now, pick one**. The header shows the full logo with the navigation in a row below from 1024px, and the compact logo below that. The footer shows the logo on a white plate. The favicon, `favicon.ico` and the Apple touch icon come from the big daisy. Generator and notes: `design/logo/`.
+- **About**: shows `flowers_in_a_barrel_12.jpg` as "The original 2013 header".
+- **Comments**: all **46** restored with author, date ("March 31, 2014 at 3:44 pm") and reply threading. The first export missed the theme's markup and skipped the About page's 15. `tools/verify/03_parse.py` is fixed, and `tools/verify/fix_comments.py` rewrote only the `comments:` blocks of 15 files. It verifies that every existing comment's words are unchanged, and a separate check confirmed the bodies are byte-identical.
+- **The 4 posts at 85–90% of the original word count**: no article text was lost. The gaps were:
+  - Instagram captions the export dropped (kmfdm, modest-mouse, mark-zaleski). All 5 Instagram embeds now show their caption and credit as a card (`tools/verify/fix_embeds.py`).
+  - A self-hosted video the export dropped (mark-zaleski). It's back in place in the post, but the file must be downloaded (see below).
+  - billy-roberts: fallback text inside its 3 Bandcamp iframes, which readers never saw. All 3 players are present.
+
+  Across all 172 posts, the site now shows at least 98.9% of the original words; what's left is Instagram's "View this post on Instagram" button text.
+
 ## Not done / needs a person
+- **Mark Zaleski video**: `web.archive.org` is blocked from the build environment. From any machine, run:
+  `curl -L -o public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4 "https://web.archive.org/web/20180213080202id_/http://www.flowersinagun.com/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4"`
+  then commit it. The post shows the video as soon as the file exists.
 - **Keystatic GitHub App**: create it, set the env vars and add Martina as a collaborator (steps in `README.md`). The OAuth callback goes through the trailing-slash redirect (`/callback` → `/callback/`). I expect that to work, but it's unverified until the app exists.
 - **Vercel preview**, then `tools/verify/05_verify.py --base <preview> --no-variants`. Also check on the first deploy:
   1. that the ~540 MB `public/` is accepted;
@@ -33,7 +47,9 @@
 - No site search: optional in `CLAUDE.md`. The 404 page links to the home page and the four main categories.
 
 ## Content problems (not changed; need Martina's decision)
-1. **Comment authors and dates are all empty** (0 of 31 comments have them), so they show as "Reader". This is an exporter gap; the raw HTML in `tools/verify/data/raw/html/` may still have them.
+1. **Comments to review** (any of them can be deleted in the editor):
+   - The **About page's 15 comments** (2011) are Bulgarian banter between friends: crude sexual jokes, a remark about her weight, and Martina's personal email (`martkawaii@gmail.com`). They are restored as requested, but Martina should decide whether they belong on her portfolio's About page.
+   - **2 spam comments**: "co op inspection" on `alt-j-dissolve-me-song-review` and "search" on `the-unravelling-dig-again-into-beautiful-darkness-with-new-single-revolt` (generic praise, keyword-named authors).
 2. **Hall of Fame links to 6 posts that weren't recovered**, so those links 404: `/band-of-the-week-1-viewer/`, `/radio-radio/`, `/black-eskimo/`, `/o-h/`, `/the-clover-club/`, `/and-the-new-band-of-the-week-winner-is/`. Other dead internal links:
    - `/kid-tested/` (in `the-insurance-salesmen`);
    - `/fixe-fetish-party-june-26th-one-one-nyc/` (in `fixe-magazine-party-tammany-hall`);
@@ -59,5 +75,6 @@
 ## Next steps
 1. Import the repo in Vercel, deploy a preview and run `05_verify.py` against it.
 2. Set up the Keystatic GitHub App and env vars; have Martina make a test edit.
-3. Martina reviews the content problems above (especially 1, 2, 4 and 7) and looks for lost photos using `missing_photos_for_martina.csv`.
-4. At launch: point DNS at Vercel, make `www.flowersinagun.com` the primary domain (apex redirects to it) and move to Vercel Pro before ads go live.
+3. Martina picks the red or lime logo, reviews the content problems above (especially 1, 2, 4 and 7) and looks for lost photos using `missing_photos_for_martina.csv`.
+4. Download the Mark Zaleski video (command above).
+5. At launch: point DNS at Vercel, make `www.flowersinagun.com` the primary domain (apex redirects to it) and move to Vercel Pro before ads go live.

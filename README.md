@@ -34,7 +34,8 @@ npm start
 | `content/` | Posts, pages, authors, categories, tags (Keystatic format) |
 | `public/wp-content/uploads/` | Recovered images on their original WordPress paths. Do not move or rename them |
 | `redirects.mjs` | 186 permanent redirects from the exporter (`?p=ID` shortlinks etc.) |
-| `tools/verify/` | Wayback recovery pipeline and `05_verify.py` (checks a deployed site against the archive) |
+| `tools/verify/` | Wayback recovery pipeline, `05_verify.py` (checks a deployed site against the archive), `fix_comments.py` / `fix_embeds.py` (scripted content fixes, re-runnable) |
+| `design/logo/` | Logo generator: `public/brand/*.svg` and the favicons (see its README) |
 
 ## Environment variables
 
