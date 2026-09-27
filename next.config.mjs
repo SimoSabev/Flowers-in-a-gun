@@ -7,6 +7,8 @@ const nextConfig = {
   // Old WordPress image paths are served as-is from public/, never through the image optimiser.
   images: { unoptimized: true },
   poweredByHeader: false,
+  // Don't let `next dev` append its own agent rules to CLAUDE.md (the project spec).
+  agentRules: false,
   async redirects() {
     return [
       ...legacyRedirects,

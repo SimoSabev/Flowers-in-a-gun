@@ -18,6 +18,21 @@ const PULL_QUOTE_MAX_WORDS = 40;
 /** Body column is at most 680px wide. */
 const BODY_SIZES = '(min-width: 720px) 680px, 100vw';
 
+/**
+ * WordPress turned scheme-less links ("www.band.com", "a@b.com") into paths under the post,
+ * e.g. "/the-divers/www.facebook.com/thediversmusic". They were broken on the old site too;
+ * point them where the author meant. Only unambiguous host names and e-mail addresses qualify.
+ */
+const SCHEMELESS_HOST = /^\/[^/]+\/((?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com|net|org|co\.uk|dk|fm)(?:\/[^\s]*)?)$/i;
+const SCHEMELESS_EMAIL = /^\/[^/]+\/([^/\s@]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+)$/i;
+
+function repairHref(href: string): string {
+  const email = href.match(SCHEMELESS_EMAIL);
+  if (email) return `mailto:${email[1]}`;
+  const host = href.match(SCHEMELESS_HOST);
+  return host ? `https://${host[1]}` : href;
+}
+
 type Vars = { images: Record<string, LocalImage | null> };
 
 function isEmpty(child: RenderableTreeNode): boolean {
@@ -42,6 +57,12 @@ const config: Config = {
     },
   },
   nodes: {
+    // Render the body's children directly: the page already provides the <article> element.
+    document: {
+      transform(node, cfg) {
+        return node.transformChildren(cfg);
+      },
+    },
     image: {
       attributes: { src: { type: String }, alt: { type: String }, title: { type: String } },
       transform(node, cfg) {
@@ -79,7 +100,8 @@ const config: Config = {
           else if (url.protocol === 'http:' || url.protocol === 'https:') attrs.rel = 'noopener noreferrer';
           else if (url.protocol !== 'mailto:') href = '#';
         } catch {
-          // relative link, keep as-is
+          href = repairHref(href);
+          if (href.startsWith('https://')) attrs.rel = 'noopener noreferrer';
         }
         if (node.attributes.title) attrs.title = String(node.attributes.title);
         return new Tag('a', { href, ...attrs }, node.transformChildren(cfg));
