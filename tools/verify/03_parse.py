@@ -22,6 +22,7 @@ import collections
 import csv
 import json
 import re
+from datetime import datetime
 from urllib.parse import unquote, urljoin, urlsplit
 
 from bs4 import BeautifulSoup
@@ -107,20 +108,67 @@ def internal_paths(soup, base: str) -> set[str]:
     return out
 
 
+COMMENT_DATE = re.compile(r"([A-Z][a-z]+ \d{1,2}, \d{4})(?:\s+at\s+(\d{1,2}:\d{2}\s*[ap]m))?", re.I)
+
+
+def comment_date(text: str) -> str:
+    """'March 31, 2014 at 3:44 pm' -> '2014-03-31T15:44' (as shown on the site, no time zone)."""
+    m = COMMENT_DATE.search(text or "")
+    if not m:
+        return ""
+    try:
+        day = datetime.strptime(m.group(1), "%B %d, %Y").strftime("%Y-%m-%d")
+        if not m.group(2):
+            return day
+        return day + datetime.strptime(m.group(2).replace(" ", "").lower(), "%I:%M%p").strftime("T%H:%M")
+    except ValueError:
+        return ""
+
+
+def comment_text(el) -> str:
+    """Plain text of a comment: paragraphs separated by a blank line, <br> as a newline, smileys as their alt."""
+    el = BeautifulSoup(str(el), "html.parser")
+    for img in el.select("img"):
+        img.replace_with(img.get("alt", ""))
+    for br in el.select("br"):
+        br.replace_with("\n")
+    blocks = el.select("p") or [el]
+    paras = []
+    for b in blocks:
+        lines = [re.sub(r"[ \t\r\f\v]+", " ", ln).strip() for ln in b.get_text("").split("\n")]
+        para = "\n".join(ln for ln in lines if ln)
+        if para:
+            paras.append(para)
+    return "\n\n".join(paras)
+
+
 def parse_comments(soup) -> list[dict]:
+    """Archived comments in document order, with thread depth (1 = top level).
+
+    Handles the blog's theme (author/date as plain text in .comment-author / .comment-meta, body in
+    .comment-text) and the WordPress default markup (.fn, <time datetime>, .comment-content).
+    """
     out = []
-    for li in soup.select("ol.commentlist li.comment, ol.comment-list li.comment, .commentlist .comment"):
-        body = li.select_one(".comment-content, .comment-body > p, .comment-text") or li
-        body = BeautifulSoup(str(body), "html.parser")
-        for j in body.select(".reply, .comment-meta, .comment-author, ul.children, ol.children"):
+    for li in soup.select("ol.commentlist li.comment, ol.comment-list li.comment"):
+        own = BeautifulSoup(str(li), "html.parser").select_one("li")
+        for child in own.select("ul.children, ol.children"):
+            child.decompose()
+        depth = re.search(r"\bdepth-(\d+)\b", " ".join(li.get("class", [])))
+        author = own.select_one(".comment-author .fn, .fn, cite") or own.select_one(".comment-author")
+        t = own.select_one("time[datetime]")
+        body = own.select_one(".comment-text") or own.select_one(".comment-content")
+        if body is None:
+            continue
+        for j in body.select(".reply, .comment-meta, .comment-author, .comment-metadata"):
             j.decompose()
-        t = li.select_one("time[datetime]")
         c = {
-            "author": txt(li.select_one(".comment-author .fn, .fn, cite")),
-            "date": t.get("datetime", "") if t else "",
+            "author": txt(author),
+            "date": t.get("datetime", "")[:16] if t else comment_date(txt(own.select_one(".comment-meta, .comment-metadata"))),
+            "depth": int(depth.group(1)) if depth else 1,
+            "text": comment_text(body),
             "content_html": body.decode_contents().strip(),
         }
-        if c["content_html"] and c not in out:
+        if c["text"] and c not in out:
             out.append(c)
     return out
 
