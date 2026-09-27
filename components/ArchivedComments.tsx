@@ -11,7 +11,7 @@ export function ArchivedComments({ comments }: { comments: Comment[] }) {
       <p className="mt-3 text-[14px] text-muted">Archived from the original site. Commenting is closed.</p>
       <ol className="mt-4">
         {comments.map((c, i) => (
-          <li key={i} className="border-b border-rule-soft py-5">
+          <li key={i} className="border-b border-rule-soft py-5 [overflow-wrap:anywhere]">
             <p className="label text-muted">
               {c.author || 'Reader'}
               {c.date && <> · {c.date}</>}

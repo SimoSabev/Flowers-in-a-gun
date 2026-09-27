@@ -33,10 +33,10 @@ export function AdSlot({
   const isDev = process.env.NODE_ENV === 'development';
   if (!ADS_ENABLED && !isDev) return null;
 
-  const box = (s: AdSize, extra: string) => {
+  const box = (s: AdSize, display: string) => {
     const { width, height } = SIZES[s];
     return (
-      <div className={`mx-auto flex max-w-full flex-col items-center ${extra}`} style={{ width }}>
+      <div className={`mx-auto max-w-full flex-col items-center ${display}`} style={{ width }}>
         <span className="label mb-1 self-start text-[10px] text-muted">Advertisement</span>
         <div
           data-ad-slot={s}
@@ -53,11 +53,11 @@ export function AdSlot({
     <aside aria-label="Advertisement" className={className}>
       {mobileSize ? (
         <>
-          {box(mobileSize, 'md:hidden')}
+          {box(mobileSize, 'flex md:hidden')}
           {box(size, 'hidden md:flex')}
         </>
       ) : (
-        box(size, '')
+        box(size, 'flex')
       )}
     </aside>
   );

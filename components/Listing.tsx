@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import type { Post } from '@/lib/content';
+import { breakSlashes } from '@/lib/format';
 import { AdSlot } from './AdSlot';
 import { Pagination } from './Pagination';
 import { PostCard } from './PostCard';
@@ -26,7 +27,7 @@ export function Listing({
     <div className="wrap">
       <header className="mt-10 border-b-2 border-ink pb-6 lg:mt-14">
         <p className="label text-green-text">{eyebrow}</p>
-        <h1 className="display mt-3 text-[40px] sm:text-[52px] lg:text-[64px]">{title}</h1>
+        <h1 className="display mt-3 text-[40px] sm:text-[52px] lg:text-[64px]">{breakSlashes(title)}</h1>
         <p className="mt-3 text-[14px] font-semibold text-muted">
           {count} {count === 1 ? 'story' : 'stories'}
           {total > 1 && ` · Page ${page} of ${total}`}

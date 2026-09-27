@@ -14,3 +14,8 @@ export function formatDate(iso: string): string {
 export function rfc822(iso: string): string {
   return new Date(`${iso.slice(0, 10)}T12:00:00Z`).toUTCString();
 }
+
+/** Let long "Alternative/Rock/Metal"-style names wrap after each slash (zero-width space). */
+export function breakSlashes(s: string): string {
+  return s.replace(/\//g, '/\u200B');
+}
