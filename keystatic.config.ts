@@ -5,7 +5,10 @@ import { block } from '@keystatic/core/content-components';
 const storage =
   process.env.NODE_ENV === 'development'
     ? ({ kind: 'local' } as const)
-    : ({ kind: 'github', repo: 'OWNER/flowersinagun' } as const);
+    : ({
+        kind: 'github',
+        repo: (process.env.KEYSTATIC_GITHUB_REPO ?? 'SimoSabev/Flowers-in-a-gun') as `${string}/${string}`,
+      } as const);
 
 const content = fields.markdoc({
   label: 'Content',
