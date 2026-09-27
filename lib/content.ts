@@ -13,7 +13,11 @@ import { bestVariant, isLocalPath, localImage, type LocalImage } from './images'
 
 const reader = createReader(process.cwd(), keystaticConfig);
 
-export type Comment = { author: string; date: string; text: string };
+export type Comment = { author: string; date: string; depth: number; text: string };
+
+type RawComment = { author: string; date: string; depth: number | null; text: string };
+const toComments = (list: readonly RawComment[]): Comment[] =>
+  list.map((c) => ({ author: c.author, date: c.date, depth: Math.min(3, Math.max(1, c.depth ?? 1)), text: c.text }));
 
 export type Term = { slug: string; name: string; count: number };
 
@@ -47,6 +51,7 @@ export type Page = {
   cover: LocalImage | null;
   wpId: number | null;
   originalUrl: string | null;
+  comments: Comment[];
   body: () => Promise<Node>;
 };
 
@@ -159,7 +164,7 @@ async function load(): Promise<Store> {
         ...(await coverOf(entry.featuredImage, node)),
         wpId: entry.wpId ?? null,
         originalUrl: entry.originalUrl || null,
-        comments: entry.comments.map((c) => ({ author: c.author, date: c.date, text: c.text })),
+        comments: toComments(entry.comments),
         body: async () => (await entry.content()).node,
       };
     }),
@@ -178,6 +183,7 @@ async function load(): Promise<Store> {
         cover: (await coverOf(entry.featuredImage, node)).cover,
         wpId: entry.wpId ?? null,
         originalUrl: entry.originalUrl || null,
+        comments: toComments(entry.comments),
         body: async () => (await entry.content()).node,
       };
     }),

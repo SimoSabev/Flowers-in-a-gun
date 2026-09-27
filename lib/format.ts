@@ -10,6 +10,14 @@ export function formatDate(iso: string): string {
   return `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}`;
 }
 
+/** "2014-03-31T15:44" -> "March 31, 2014 at 3:44 pm" (the old site's comment timestamp style). */
+export function formatDateTime(iso: string): string {
+  const m = iso.match(/^\d{4}-\d{2}-\d{2}T(\d{2}):(\d{2})/);
+  if (!m) return formatDate(iso);
+  const h = Number(m[1]);
+  return `${formatDate(iso)} at ${h % 12 || 12}:${m[2]} ${h < 12 ? 'am' : 'pm'}`;
+}
+
 /** RFC 822 date for RSS, at noon UTC so the calendar day is stable in every reader. */
 export function rfc822(iso: string): string {
   return new Date(`${iso.slice(0, 10)}T12:00:00Z`).toUTCString();

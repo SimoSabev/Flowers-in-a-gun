@@ -12,6 +12,17 @@ const storage =
         repo: (process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_REPO ?? 'SimoSabev/Flowers-in-a-gun') as `${string}/${string}`,
       } as const);
 
+// Read-only archive of comments from the original site (posts and pages).
+const comments = fields.array(
+  fields.object({
+    author: fields.text({ label: 'Author' }),
+    date: fields.text({ label: 'Date', description: 'As shown on the old site, e.g. 2014-03-31T15:44' }),
+    depth: fields.integer({ label: 'Reply depth', description: '1 = comment, 2 = reply, 3 = reply to a reply', defaultValue: 1 }),
+    text: fields.text({ label: 'Text', multiline: true }),
+  }),
+  { label: 'Archived comments', itemLabel: (p) => p.fields.author.value },
+);
+
 const content = fields.markdoc({
   label: 'Content',
   options: { image: { directory: 'public/images/posts', publicPath: '/images/posts/' } },
@@ -26,6 +37,9 @@ const content = fields.markdoc({
                     'facebook', 'instagram', 'audio', 'video', 'other'].map((v) => ({ label: v, value: v })),
         }),
         src: fields.text({ label: 'Embed URL' }),
+        // Optional, for posts whose player is gone (Instagram): the text readers saw on the old site.
+        caption: fields.text({ label: 'Caption (optional)', multiline: true }),
+        credit: fields.text({ label: 'Credit line (optional)', description: 'e.g. "A post shared by … on Oct 7, 2017"' }),
       },
     }),
   },
@@ -64,14 +78,7 @@ export default config({
         // --- archive metadata (kept for redirects / provenance) ---
         wpId: fields.integer({ label: 'Original WordPress ID' }),
         originalUrl: fields.text({ label: 'Original URL' }),
-        comments: fields.array(
-          fields.object({
-            author: fields.text({ label: 'Author' }),
-            date: fields.text({ label: 'Date' }),
-            text: fields.text({ label: 'Text', multiline: true }),
-          }),
-          { label: 'Archived comments', itemLabel: (p) => p.fields.author.value },
-        ),
+        comments,
       },
     }),
     pages: collection({
@@ -86,6 +93,7 @@ export default config({
         content,
         wpId: fields.integer({ label: 'Original WordPress ID' }),
         originalUrl: fields.text({ label: 'Original URL' }),
+        comments,
       },
     }),
     authors: collection({

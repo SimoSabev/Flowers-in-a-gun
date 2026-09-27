@@ -14,6 +14,7 @@ export function Cover({
   titleSize = 'text-[26px]',
   fit = 'cover',
   sizes = '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw',
+  alt = '',
 }: {
   image: LocalImage | null;
   title: string;
@@ -25,6 +26,8 @@ export function Cover({
   fit?: 'cover' | 'contain';
   /** Rendered width hint for srcset selection. Defaults to a grid card. */
   sizes?: string;
+  /** Covers are decorative next to their title by default; pass alt when the image stands alone. */
+  alt?: string;
 }) {
   if (!image) {
     return (
@@ -46,7 +49,7 @@ export function Cover({
       sizes={image.srcSet ? sizes : undefined}
       width={image.width}
       height={image.height}
-      alt=""
+      alt={alt}
       loading={priority ? 'eager' : 'lazy'}
       fetchPriority={priority ? 'high' : undefined}
       decoding="async"

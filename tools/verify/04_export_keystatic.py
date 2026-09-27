@@ -347,11 +347,13 @@ def main() -> None:
         if p["wp_id"]:
             fm.append(f"wpId: {p['wp_id']}")
         fm.append(f"originalUrl: {q(p['original_url'])}")
-        if p.get("comments") and not is_page:
+        if p.get("comments"):
+            # plain text, author, "YYYY-MM-DDTHH:MM" and thread depth, as parsed by 03_parse.parse_comments
             fm.append("comments:")
             for c in p["comments"]:
-                text = conv.convert(c["content_html"]).strip()
-                fm += [f"  - author: {q(c['author'])}", f"    date: {q(c['date'][:10])}", f"    text: {q(text)}"]
+                text = c.get("text") or conv.convert(c["content_html"]).strip()
+                fm += [f"  - author: {q(c['author'])}", f"    date: {q(c['date'])}",
+                       f"    depth: {int(c.get('depth') or 1)}", f"    text: {q(text)}"]
         body = conv.convert(p["body_html"])
         out = SITE / "content" / ("pages" if is_page else "posts") / f"{slug}.mdoc"
         out.write_text("---\n" + "\n".join(fm) + "\n---\n" + body, "utf-8")

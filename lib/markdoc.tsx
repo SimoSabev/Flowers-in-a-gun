@@ -3,7 +3,7 @@ import React from 'react';
 import Markdoc, { Tag, type Config, type Node, type RenderableTreeNode } from '@markdoc/markdoc';
 import { Embed } from '@/components/Embed';
 import { ExternalImage } from '@/components/ExternalImage';
-import { isLocalPath, localImage, type LocalImage } from './images';
+import { isLocalPath, localImage, publicFileExists, type LocalImage } from './images';
 
 /**
  * Markdoc -> React for recovered WordPress content.
@@ -53,7 +53,18 @@ const config: Config = {
     embed: {
       render: 'Embed',
       selfClosing: true,
-      attributes: { provider: { type: String }, src: { type: String } },
+      attributes: {
+        provider: { type: String },
+        src: { type: String },
+        caption: { type: String },
+        credit: { type: String },
+      },
+      transform(node, cfg) {
+        const attrs = node.transformAttributes(cfg);
+        // Self-hosted audio/video: like images, render nothing if the file wasn't recovered.
+        if (typeof attrs.src === 'string' && isLocalPath(attrs.src) && !publicFileExists(attrs.src)) return null;
+        return new Tag('Embed', attrs);
+      },
     },
   },
   nodes: {
