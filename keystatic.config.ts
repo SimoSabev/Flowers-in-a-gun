@@ -37,6 +37,9 @@ const content = fields.markdoc({
                     'facebook', 'instagram', 'audio', 'video', 'other'].map((v) => ({ label: v, value: v })),
         }),
         src: fields.text({ label: 'Embed URL' }),
+        // Optional, for posts whose player is gone (Instagram): the text readers saw on the old site.
+        caption: fields.text({ label: 'Caption (optional)', multiline: true }),
+        credit: fields.text({ label: 'Credit line (optional)', description: 'e.g. "A post shared by … on Oct 7, 2017"' }),
       },
     }),
   },

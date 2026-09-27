@@ -40,6 +40,12 @@ function toFile(src: string): string | null {
   return file.startsWith(PUBLIC_DIR + path.sep) ? file : null;
 }
 
+/** Whether a site path ("/wp-content/uploads/…") exists under public/. */
+export function publicFileExists(src: string): boolean {
+  const file = isLocalPath(src) ? toFile(src) : null;
+  return !!file && fs.existsSync(file);
+}
+
 const cache = new Map<string, Promise<LocalImage | null>>();
 
 /** Intrinsic size of a local image, or null when the file is missing or unreadable. */

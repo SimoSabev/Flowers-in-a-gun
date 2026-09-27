@@ -1,7 +1,9 @@
 /**
- * Markdoc `{% embed provider src %}` block. Live providers render a responsive, lazy iframe whose
- * box is reserved up front; dead or unknown providers (MySpace, Instagram posts, ...) render a
- * plain link, never a broken iframe. The iframe host must match the provider.
+ * Markdoc `{% embed provider src caption credit %}` block. Live providers render a responsive, lazy
+ * iframe whose box is reserved up front; dead or unknown providers (MySpace, Instagram posts, ...)
+ * render a plain link, never a broken iframe. The iframe host must match the provider.
+ * Instagram posts with a recovered caption render as a caption card. Self-hosted audio/video
+ * (`/wp-content/...`) render native players; lib/markdoc.tsx drops them if the file is missing.
  */
 
 type Spec = { hosts: string[]; label: string } & ({ ratio: number } | { height: (url: URL) => number });
@@ -38,10 +40,46 @@ function parse(src: string): URL | null {
   }
 }
 
-export function Embed({ provider, src }: { provider?: string; src?: string }) {
+export function Embed({
+  provider,
+  src,
+  caption,
+  credit,
+}: {
+  provider?: string;
+  src?: string;
+  caption?: string;
+  credit?: string;
+}) {
+  if (src && src.startsWith('/') && !src.startsWith('//')) {
+    if (provider === 'video') {
+      return (
+        <div className="embed" style={{ aspectRatio: '1 / 1', maxWidth: 480 }}>
+          <video src={src} controls preload="metadata" playsInline className="block h-full w-full" />
+        </div>
+      );
+    }
+    if (provider === 'audio') return <audio src={src} controls preload="metadata" className="w-full" />;
+    return null;
+  }
   const url = src ? parse(src) : null;
   if (!url) return null;
   const spec = provider ? PROVIDERS[provider] : undefined;
+
+  if (provider === 'instagram' && caption) {
+    return (
+      <figure className="embed-card border-2 border-ink bg-surface p-5">
+        <p className="label text-green-text">Instagram</p>
+        <p className="mt-3 whitespace-pre-line text-[17px] leading-relaxed">{caption}</p>
+        {credit && <figcaption className="mt-3 text-[13px] text-muted">{credit}</figcaption>}
+        <p className="mt-4 text-[15px] font-bold">
+          <a href={url.href} rel="noopener noreferrer">
+            View on Instagram →
+          </a>
+        </p>
+      </figure>
+    );
+  }
 
   if (!spec || !spec.hosts.includes(url.hostname)) {
     return (
