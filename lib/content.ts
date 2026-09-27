@@ -16,8 +16,21 @@ const reader = createReader(process.cwd(), keystaticConfig);
 export type Comment = { author: string; date: string; depth: number; text: string };
 
 type RawComment = { author: string; date: string; depth: number | null; text: string };
-const toComments = (list: readonly RawComment[]): Comment[] =>
-  list.map((c) => ({ author: c.author, date: c.date, depth: Math.min(3, Math.max(1, c.depth ?? 1)), text: c.text }));
+
+/** Email addresses are never shown, even in archived comments (the content file keeps the original). */
+const EMAIL = /(?:mailto:)?[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/g;
+export const redactEmails = (s: string) => s.replace(EMAIL, '[email removed]');
+
+/** Comments as the site may display them: none if the entry hides them, emails redacted. */
+const toComments = (list: readonly RawComment[], hidden: boolean): Comment[] =>
+  hidden
+    ? []
+    : list.map((c) => ({
+        author: redactEmails(c.author),
+        date: c.date,
+        depth: Math.min(3, Math.max(1, c.depth ?? 1)),
+        text: redactEmails(c.text),
+      }));
 
 export type Term = { slug: string; name: string; count: number };
 
@@ -164,7 +177,7 @@ async function load(): Promise<Store> {
         ...(await coverOf(entry.featuredImage, node)),
         wpId: entry.wpId ?? null,
         originalUrl: entry.originalUrl || null,
-        comments: toComments(entry.comments),
+        comments: toComments(entry.comments, entry.hideComments),
         body: async () => (await entry.content()).node,
       };
     }),
@@ -183,7 +196,7 @@ async function load(): Promise<Store> {
         cover: (await coverOf(entry.featuredImage, node)).cover,
         wpId: entry.wpId ?? null,
         originalUrl: entry.originalUrl || null,
-        comments: toComments(entry.comments),
+        comments: toComments(entry.comments, entry.hideComments),
         body: async () => (await entry.content()).node,
       };
     }),

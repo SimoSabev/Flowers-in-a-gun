@@ -33,6 +33,12 @@ spec.loader.exec_module(parse03)
 
 FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 
+# Comments deliberately removed from content (spam, by Martina's decision). Never re-add them.
+DELETED = {
+    ("alt-j-dissolve-me-song-review", "co op inspection"),
+    ("the-unravelling-dig-again-into-beautiful-darkness-with-new-single-revolt", "search"),
+}
+
 
 def q(s: str) -> str:
     """YAML double-quoted scalar (JSON string syntax is valid YAML)."""
@@ -106,6 +112,9 @@ def main() -> None:
         target = by_url.get(url)
         if not target:
             print(f"!! no content file for {url} ({len(comments)} comments)")
+            continue
+        comments = [c for c in comments if (target.stem, c["author"]) not in DELETED]
+        if not comments:
             continue
         src = target.read_text("utf-8")
         m = FRONTMATTER.match(src)
