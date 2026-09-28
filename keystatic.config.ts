@@ -23,6 +23,12 @@ const comments = fields.array(
   { label: 'Archived comments', itemLabel: (p) => p.fields.author.value },
 );
 
+const hideComments = fields.checkbox({
+  label: 'Hide archived comments on the site',
+  description: 'The comments stay in this file; they are just not shown.',
+  defaultValue: false,
+});
+
 const content = fields.markdoc({
   label: 'Content',
   options: { image: { directory: 'public/images/posts', publicPath: '/images/posts/' } },
@@ -78,6 +84,7 @@ export default config({
         // --- archive metadata (kept for redirects / provenance) ---
         wpId: fields.integer({ label: 'Original WordPress ID' }),
         originalUrl: fields.text({ label: 'Original URL' }),
+        hideComments,
         comments,
       },
     }),
@@ -93,6 +100,7 @@ export default config({
         content,
         wpId: fields.integer({ label: 'Original WordPress ID' }),
         originalUrl: fields.text({ label: 'Original URL' }),
+        hideComments,
         comments,
       },
     }),
