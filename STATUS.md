@@ -34,14 +34,18 @@
 
   Across all 172 posts, the site now shows at least 98.9% of the original words; what's left is Instagram's "View this post on Instagram" button text.
 
+### Round 3: first deploy (November 9, 2026)
+- **Vercel project `flowersinagun`** (team `simosabevs-projects`), linked to this repo, production branch `main`. The first deploy is live at **https://flowersinagun.vercel.app**. Every push to `main` redeploys; PR branches get previews. No env vars are set yet; the defaults in `lib/site.ts` and `keystatic.config.ts` are correct for now.
+- **The Vercel build passes**: 1082 routes, route check 0 missing / 0 broken. The ~540 MB `public/` is accepted, and `public/_img/` (built during the build) is served.
+- **`05_verify.py --base https://flowersinagun.vercel.app --no-variants`: 186/186 OK.** The www/non-www and http variants can only be checked after DNS points at Vercel.
+- Spot checks: `?p=ID` → slug, `/about` → `/about/`, `/page/1/` → `/`, real 404, `/feed/` RSS, `sitemap.xml`, `robots.txt`, the Cyrillic slug, original and resized images.
+- **The "Journalism Work" Drive folder** that Martina shared holds her ZoomIn.TV video reports (2014–2018) and raw footage. It contains no lost blog media; the Mark Zaleski video isn't there. It's portfolio material for martinadechevska.com, which is out of scope here.
+
 ## Not done / needs a person
 - **Mark Zaleski video**: `web.archive.org` is blocked from the build environment. The archive captured the URL **with `?_=1`**. The first command in this file left that off, which is why the file committed on `site-v1` is a Wayback HTML page, not a video. It isn't merged, and the site ignores files that aren't real media. From any machine, run:
   `curl -L -o public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4 "https://web.archive.org/web/20180213080202id_/http://www.flowersinagun.com/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4?_=1"`
   then check it with `file public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4`, which must say "ISO Media", before committing.
 - **Keystatic GitHub App**: create it, set the env vars and add Martina as a collaborator (steps in `README.md`). The OAuth callback goes through the trailing-slash redirect (`/callback` → `/callback/`). I expect that to work, but it's unverified until the app exists.
-- **Vercel preview**, then `tools/verify/05_verify.py --base <preview> --no-variants`. Also check on the first deploy:
-  1. that the ~540 MB `public/` is accepted;
-  2. that `public/_img/`, generated during the build, is served. If it isn't, pages still work and fall back to the full-size originals.
 - `design/reference-home.html` was never in the repo. The design follows `DESIGN.md` plus the approved screenshot.
 - `NEXT_PUBLIC_CONTACT_EMAIL` is unknown. Until it's set, "Advertise" and "Submit your band" are hidden. The Newsletter link is hidden per `DESIGN.md`.
 - No site search: optional in `CLAUDE.md`. The 404 page links to the home page and the four main categories.
@@ -71,8 +75,9 @@
 `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CONTACT_EMAIL`, `NEXT_PUBLIC_ADS_ENABLED`, `NEXT_PUBLIC_KEYSTATIC_GITHUB_REPO`, `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`, `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`. The last four are only needed for the production editor. Details in `README.md` and `.env.example`.
 
 ## Next steps
-1. Import the repo in Vercel, deploy a preview and run `05_verify.py` against it.
-2. Set up the Keystatic GitHub App and env vars; have Martina make a test edit.
-3. Martina picks the red or lime logo, reviews the content problems above (especially 2, 4 and 7) and looks for lost photos using `missing_photos_for_martina.csv`.
-4. Download the Mark Zaleski video (corrected command above, with `?_=1`).
-5. At launch: point DNS at Vercel, make `www.flowersinagun.com` the primary domain (apex redirects to it) and move to Vercel Pro before ads go live.
+1. ~~Import the repo in Vercel, deploy and run `05_verify.py`~~ (done, 186/186).
+2. Set `NEXT_PUBLIC_CONTACT_EMAIL` in Vercel (Production) once the address is decided, then redeploy.
+3. Set up the Keystatic GitHub App and env vars; have Martina make a test edit.
+4. Martina picks the red or lime logo, reviews the content problems above (especially 2, 4 and 7) and looks for lost photos using `missing_photos_for_martina.csv`.
+5. Download the Mark Zaleski video (corrected command above, with `?_=1`).
+6. At launch: point DNS at Vercel, make `www.flowersinagun.com` the primary domain (apex redirects to it) and move to Vercel Pro before ads go live.
