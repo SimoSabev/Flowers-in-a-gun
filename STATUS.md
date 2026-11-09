@@ -41,10 +41,19 @@
 - Spot checks: `?p=ID` → slug, `/about` → `/about/`, `/page/1/` → `/`, real 404, `/feed/` RSS, `sitemap.xml`, `robots.txt`, the Cyrillic slug, original and resized images.
 - **The "Journalism Work" Drive folder** that Martina shared holds her ZoomIn.TV video reports (2014–2018) and raw footage. It contains no lost blog media; the Mark Zaleski video isn't there. It's portfolio material for martinadechevska.com, which is out of scope here.
 
+### Round 4: Video section from Martina's Drive
+- **`/video/`** (in the main nav): her **65 ZoomIn.TV video reports** from the "Journalism Work/ZoomIn.Tv" Drive folder, grouped as New York Fashion Week (32), Film & Tribeca (11) and New York (22). The cards are click-to-play, so the page loads no players until a reader clicks. The 16:9 box is reserved up front.
+- A new Keystatic collection **Videos** (`content/videos/*.yaml`) holds title, outlet, section, Drive ID, an optional YouTube ID (used instead of Drive when set), an optional description and a hide checkbox. Martina can add, hide or re-section videos in the editor.
+- The 65 entries come from `tools/videos/import_drive.py` (with `drive_zoomin.tsv`). Titles are the file names with `.mp4` removed and `_` turned back into `:` or `/`; nothing else is reworded. No dates are shown, because the files only carry their 2019 upload date.
+- **The videos are played from her Drive, not from this repo.** 1 GB of video in git or on Vercel is not workable.
+
 ## Not done / needs a person
 - **Mark Zaleski video**: `web.archive.org` is blocked from the build environment. The archive captured the URL **with `?_=1`**. The first command in this file left that off, which is why the file committed on `site-v1` is a Wayback HTML page, not a video. It isn't merged, and the site ignores files that aren't real media. From any machine, run:
   `curl -L -o public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4 "https://web.archive.org/web/20180213080202id_/http://www.flowersinagun.com/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4?_=1"`
   then check it with `file public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4`, which must say "ISO Media", before committing.
+- **Make the videos public (Martina, 1 minute)**: in Drive, right-click the `ZoomIn.Tv` folder, choose Share, set General access to "Anyone with the link" with the Viewer role. Until then every video card shows "You need access" when played, and the cards show titles instead of thumbnails. Better long term: upload them to a YouTube channel and fill in `youtubeId`, which gives faster playback and no Drive bandwidth limits.
+- **Rights**: these reports were made for ZoomIn.TV, which probably holds the copyright. Martina should confirm she may show them as her portfolio.
+- **Not added from the Drive folder**: 15 untitled raw clips from December 2016 and January 2017 (`2016-12-25 …`, `2017-01-11 …`, `2017-01-12 …` (518 MB), `2017-01-20 …`, `mart1.mp4`, one `.part` file that is an incomplete download), "Trump's daughter asked Milo Yiannopoulous about Jewish control…" (in the folder root, not in ZoomIn.Tv; not clear it's her report) and an audio-only copy of "Drunk Santas". Martina decides which, if any, go up and with what titles.
 - **Keystatic GitHub App**: create it, set the env vars and add Martina as a collaborator (steps in `README.md`). The OAuth callback goes through the trailing-slash redirect (`/callback` → `/callback/`). I expect that to work, but it's unverified until the app exists.
 - `design/reference-home.html` was never in the repo. The design follows `DESIGN.md` plus the approved screenshot.
 - `NEXT_PUBLIC_CONTACT_EMAIL` is unknown. Until it's set, "Advertise" and "Submit your band" are hidden. The Newsletter link is hidden per `DESIGN.md`.

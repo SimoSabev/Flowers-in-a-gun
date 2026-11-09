@@ -104,6 +104,32 @@ export default config({
         comments,
       },
     }),
+    videos: collection({
+      label: 'Videos',
+      slugField: 'title',
+      path: 'content/videos/*',
+      columns: ['title', 'section'],
+      schema: {
+        title: fields.slug({ name: { label: 'Title' } }),
+        outlet: fields.text({ label: 'Made for (outlet)', defaultValue: 'ZoomIn.TV' }),
+        section: fields.select({
+          label: 'Section',
+          defaultValue: 'new-york',
+          options: [
+            { label: 'Fashion Week', value: 'fashion' },
+            { label: 'Film & Tribeca', value: 'film' },
+            { label: 'New York', value: 'new-york' },
+          ],
+        }),
+        driveId: fields.text({
+          label: 'Google Drive file ID',
+          description: 'From the share link: drive.google.com/file/d/<ID>/view. The file must be shared as "Anyone with the link".',
+        }),
+        youtubeId: fields.text({ label: 'YouTube video ID (optional)', description: 'Used instead of Drive when set.' }),
+        description: fields.text({ label: 'Description (optional)', multiline: true }),
+        hidden: fields.checkbox({ label: 'Hide on the site', defaultValue: false }),
+      },
+    }),
     authors: collection({
       label: 'Authors', slugField: 'name', path: 'content/authors/*',
       schema: { name: fields.slug({ name: { label: 'Name' } }) },
