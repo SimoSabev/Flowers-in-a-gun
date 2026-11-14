@@ -15,6 +15,7 @@ export function Cover({
   fit = 'cover',
   sizes = '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw',
   alt = '',
+  fallback = 'title',
 }: {
   image: LocalImage | null;
   title: string;
@@ -28,7 +29,25 @@ export function Cover({
   sizes?: string;
   /** Covers are decorative next to their title by default; pass alt when the image stands alone. */
   alt?: string;
+  /**
+   * Without an image: 'title' prints the title in the box (for slots with no title next to them);
+   * 'brand' shows the daisy mark, for cards that already print the title below the box.
+   */
+  fallback?: 'title' | 'brand';
 }) {
+  if (!image && fallback === 'brand') {
+    return (
+      <div
+        className={`relative flex items-center justify-center overflow-hidden bg-ink ${className}`}
+        style={{ aspectRatio: ratio }}
+        aria-hidden="true"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/daisy.svg" alt="" width={96} height={96} className="h-[38%] w-auto opacity-90" />
+        <span className="label absolute bottom-3 left-4 text-[10px] text-lime">Flowers in a Gun</span>
+      </div>
+    );
+  }
   if (!image) {
     return (
       <div

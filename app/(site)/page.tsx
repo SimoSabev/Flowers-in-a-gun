@@ -41,7 +41,7 @@ export default async function Home() {
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
             {pit.map((p) => (
               <li key={p.slug}>
-                <PostCard post={p} />
+                <PostCard post={p} showDate exclude={[CATEGORY.live, CATEGORY.rock]} />
               </li>
             ))}
           </ul>
@@ -65,7 +65,7 @@ export default async function Home() {
                 <Cover
                   image={p.cover}
                   title={p.title}
-                  category={p.primaryCategory?.name}
+                  fallback="brand"
                   ratio="16 / 10"
                   sizes="(min-width: 1024px) 40vw, 100vw"
                   className="border-2 border-ink"

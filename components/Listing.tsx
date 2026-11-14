@@ -14,6 +14,7 @@ export function Listing({
   base,
   page,
   total,
+  exclude = [],
 }: {
   eyebrow: string;
   title: string;
@@ -22,6 +23,8 @@ export function Listing({
   base: string;
   page: number;
   total: number;
+  /** Category slugs implied by this listing (its own category); not repeated on the cards. */
+  exclude?: readonly string[];
 }) {
   return (
     <div className="wrap">
@@ -40,7 +43,7 @@ export function Listing({
           {posts.map((p, i) => (
             <Fragment key={p.slug}>
               <li>
-                <PostCard post={p} showDate headingLevel={2} />
+                <PostCard post={p} showDate headingLevel={2} exclude={exclude} />
               </li>
               {i === 5 && posts.length > 6 && (
                 <li className="sm:col-span-2 lg:col-span-3">

@@ -52,7 +52,7 @@ export default async function VideoPage() {
           </h2>
           <ul className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {s.items.map((v) => (
-              <li key={v.slug}>
+              <li key={v.slug} id={v.slug} className="scroll-mt-6">
                 <VideoCard
                   title={v.title}
                   outlet={v.outlet}
