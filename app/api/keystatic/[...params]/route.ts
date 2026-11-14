@@ -3,10 +3,12 @@ import config from '@/keystatic.config';
 
 /**
  * Keystatic API. In production it needs the GitHub App env vars (see README.md "Keystatic setup").
- * Until they exist the editor answers 503 instead of breaking the whole build.
+ * Until they exist the editor answers 503 instead of breaking the whole build. In development the
+ * real handler always runs: without the env vars it serves Keystatic's "Create GitHub App" setup.
  */
 const configured =
   config.storage.kind !== 'github' ||
+  process.env.NODE_ENV === 'development' ||
   Boolean(
     process.env.KEYSTATIC_GITHUB_CLIENT_ID && process.env.KEYSTATIC_GITHUB_CLIENT_SECRET && process.env.KEYSTATIC_SECRET,
   );

@@ -9,6 +9,9 @@ const nextConfig = {
   poweredByHeader: false,
   // Don't let `next dev` append its own agent rules to CLAUDE.md (the project spec).
   agentRules: false,
+  // Keystatic's GitHub App setup must run on http://127.0.0.1:3000; without this, `next dev` blocks
+  // its own scripts for that origin and /keystatic renders blank. Dev only, no effect on builds.
+  allowedDevOrigins: ['127.0.0.1'],
   async redirects() {
     return [
       ...legacyRedirects,
