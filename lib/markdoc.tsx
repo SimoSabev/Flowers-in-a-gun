@@ -33,6 +33,19 @@ function repairHref(href: string): string {
   return host ? `https://${host[1]}` : href;
 }
 
+/**
+ * Hosts injected by the 2018 hack (spam/redirect domains). Images and links to them are never
+ * rendered; the content files keep the references for the record (see STATUS.md).
+ */
+const BLOCKED_HOSTS = new Set(['img0.ibank.toxity.biz', 'redirect.bloggenpucky.net']);
+function isBlockedHost(href: string): boolean {
+  try {
+    return BLOCKED_HOSTS.has(new URL(href).hostname);
+  } catch {
+    return false;
+  }
+}
+
 type Vars = { images: Record<string, LocalImage | null> };
 
 function isEmpty(child: RenderableTreeNode): boolean {
@@ -94,7 +107,7 @@ const config: Config = {
               })
             : null;
         } else {
-          img = new Tag('ExternalImage', { src, alt });
+          img = isBlockedHost(src) ? null : new Tag('ExternalImage', { src, alt });
         }
         if (!caption) return img;
         return new Tag('figure', {}, img ? [img, caption] : [caption]);
@@ -107,6 +120,7 @@ const config: Config = {
         const attrs: Record<string, string> = {};
         try {
           const url = new URL(href);
+          if (BLOCKED_HOSTS.has(url.hostname)) return node.transformChildren(cfg);
           if (OWN_HOSTS.has(url.hostname)) href = url.pathname + url.search + url.hash;
           else if (url.protocol === 'http:' || url.protocol === 'https:') attrs.rel = 'noopener noreferrer';
           else if (url.protocol !== 'mailto:') href = '#';

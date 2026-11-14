@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { NAV } from '@/lib/site';
 import { Logo } from './Logo';
+import { SearchDialog } from './SearchDialog';
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -28,18 +29,21 @@ export function SiteHeader() {
     <header className="border-b-2 border-ink bg-surface">
       <div className="wrap flex items-center justify-between gap-4 py-3 lg:py-5">
         <Logo className="h-[60px] sm:h-[68px] lg:h-[90px] xl:h-[112px]" />
-        <button
-          type="button"
-          className="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-ink bg-surface lg:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          aria-label="Open menu"
-          onClick={() => setOpen(true)}
-        >
-          <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true">
-            <path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" strokeWidth="2" />
-          </svg>
-        </button>
+        <div className="flex shrink-0 items-center gap-2">
+          <SearchDialog />
+          <button
+            type="button"
+            className="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-ink bg-surface lg:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label="Open menu"
+            onClick={() => setOpen(true)}
+          >
+            <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true">
+              <path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" strokeWidth="2" />
+            </svg>
+          </button>
+        </div>
       </div>
       <nav aria-label="Main" className="hidden border-t border-rule-soft lg:block">
         <ul className="wrap flex h-12 items-center gap-8">

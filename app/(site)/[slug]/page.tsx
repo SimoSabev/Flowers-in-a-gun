@@ -24,7 +24,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const entry = await getEntry(safeDecode((await params).slug));
   if (!entry) return {};
-  const image = entry.cover ? [{ url: absoluteUrl(entry.cover.src), width: entry.cover.width, height: entry.cover.height }] : undefined;
+  // A page-level openGraph replaces the root one, so the default share image is repeated here.
+  const image = [entry.cover ? shareImage(entry.cover) : { url: absoluteUrl('/brand/og-default.png'), width: 1200, height: 630 }];
   return {
     title: entry.title,
     description: entry.excerpt || undefined,
@@ -34,6 +35,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ? { type: 'article', title: entry.title, description: entry.excerpt, url: entry.path, images: image, publishedTime: entry.date, authors: [entry.author.name] }
         : { title: entry.title, description: entry.excerpt, url: entry.path, images: image },
   };
+}
+
+/** Open Graph image: `cover.src` may be a resized copy (/_img/<w>/...), so report that copy's size. */
+function shareImage(cover: { src: string; width: number; height: number }) {
+  const w = Number(cover.src.match(/^\/_img\/(\d+)\//)?.[1]) || cover.width;
+  const width = Math.min(w, cover.width);
+  return { url: absoluteUrl(cover.src), width, height: Math.round((cover.height * width) / cover.width) };
 }
 
 export default async function EntryPage({ params }: Props) {

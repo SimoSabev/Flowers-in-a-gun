@@ -69,7 +69,7 @@ export type Page = {
 };
 
 /** Top-level paths owned by other routes; a post or page slug may not take them. */
-const RESERVED_SLUGS = new Set(['category', 'tag', 'author', 'page', 'feed', 'contributors', 'keystatic', 'api']);
+const RESERVED_SLUGS = new Set(['category', 'tag', 'author', 'page', 'feed', 'contributors', 'video', 'keystatic', 'api']);
 
 /** Covers narrower than this are thumbnails; they're upgraded or replaced by a body image. */
 const COVER_MIN_WIDTH = 600;
@@ -253,3 +253,54 @@ export async function getPostsInCategories(slugs: readonly string[]): Promise<Po
 }
 
 export { localImage };
+
+export type VideoSection = 'fashion' | 'film' | 'new-york';
+
+export type Video = {
+  slug: string;
+  title: string;
+  outlet: string;
+  section: VideoSection;
+  description: string | null;
+  /** Player URL (Drive preview or YouTube embed); null if the entry has no source. */
+  embed: string | null;
+  /** Poster image URL; null when none can be derived (the card falls back to typography). */
+  poster: string | null;
+};
+
+const DRIVE_ID = /^[A-Za-z0-9_-]{10,}$/;
+const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
+
+/** Martina's video reports (content/videos). Hidden entries and entries without a valid source are left out. */
+export const getVideos = cache(async (): Promise<Video[]> => {
+  const entries = await reader.collections.videos.all();
+  return entries
+    .filter((e) => !e.entry.hidden)
+    .map(({ slug, entry }): Video => {
+      const yt = entry.youtubeId?.trim();
+      const drive = entry.driveId?.trim();
+      const embed =
+        yt && YOUTUBE_ID.test(yt)
+          ? `https://www.youtube-nocookie.com/embed/${yt}`
+          : drive && DRIVE_ID.test(drive)
+            ? `https://drive.google.com/file/d/${drive}/preview`
+            : null;
+      const poster =
+        yt && YOUTUBE_ID.test(yt)
+          ? `https://i.ytimg.com/vi/${yt}/hqdefault.jpg`
+          : drive && DRIVE_ID.test(drive)
+            ? `https://drive.google.com/thumbnail?id=${drive}&sz=w640`
+            : null;
+      return {
+        slug,
+        title: entry.title,
+        outlet: entry.outlet || 'ZoomIn.TV',
+        section: entry.section as VideoSection,
+        description: entry.description?.trim() || null,
+        embed,
+        poster,
+      };
+    })
+    .filter((v) => v.embed)
+    .sort((a, b) => a.title.localeCompare(b.title));
+});

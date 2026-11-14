@@ -26,6 +26,7 @@ export const NAV = [
   { label: 'Rock/Metal', href: '/category/rockalternative/', category: 'rockalternative' },
   { label: 'Experimental', href: '/category/avant-gardeexperimental/', category: 'avant-gardeexperimental' },
   { label: 'Band of the Week', href: '/category/band-of-the-week-2/', category: 'band-of-the-week-2' },
+  { label: 'Video', href: '/video/' },
   { label: 'About', href: '/about/' },
 ] as const;
 

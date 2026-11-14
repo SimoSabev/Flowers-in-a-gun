@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...posts.map((p) => ({ url: absoluteUrl(p.path), lastModified: p.date, priority: 0.8 })),
     ...pages.map((p) => ({ url: absoluteUrl(p.path), priority: 0.5 })),
     { url: absoluteUrl('/contributors/'), priority: 0.3 },
+    { url: absoluteUrl('/video/'), priority: 0.5 },
     ...categories.filter((t) => t.count > 0).map((t) => ({ url: absoluteUrl(`/category/${t.slug}/`), priority: 0.5 })),
     ...authors.filter((t) => t.count > 0).map((t) => ({ url: absoluteUrl(`/author/${t.slug}/`), priority: 0.4 })),
     ...tags.filter((t) => t.count > 0).map((t) => ({ url: absoluteUrl(`/tag/${t.slug}/`), priority: 0.2 })),

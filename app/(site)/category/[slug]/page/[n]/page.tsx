@@ -30,6 +30,7 @@ export default async function Page({ params }: Props) {
       count={data.count}
       posts={data.posts}
       base={`/category/${data.term.slug}/`}
+      exclude={[data.term.slug]}
       page={data.page}
       total={data.total}
     />
