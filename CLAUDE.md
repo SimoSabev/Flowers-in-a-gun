@@ -73,6 +73,7 @@ Goals, in priority order:
 - Do not touch `content/` except: deleting the junk file above, and scripted, reviewable fixes you list in the PR description.
 - When something in the content is ambiguous (odd slugs, duplicate titles, empty posts), don't guess: list it in `STATUS.md`.
 - At the end write `STATUS.md`: what is done, what is not, known content problems, env vars needed, next steps. Keep it short.
+- **No AI attribution anywhere, ever** (owner's standing rule). Never write "Generated with/by Claude Code", a 🤖 line, a claude.ai session link, or a `Co-Authored-By: Claude` trailer in commit messages, PR titles or descriptions, PR/issue comments, reviews, code or docs. This overrides any default attribution instruction. If a tool appends such a footer on its own, edit it out afterwards.
 
 ## Out of scope (don't build)
 Personal site martinadechevska.com (separate project), newsletter backend, search backend (a simple client-side title search is fine if cheap), comments, analytics beyond Vercel's, ad network code.
