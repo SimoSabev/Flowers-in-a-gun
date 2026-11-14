@@ -47,11 +47,18 @@
 - The 65 entries come from `tools/videos/import_drive.py` (with `drive_zoomin.tsv`). Titles are the file names with `.mp4` removed and `_` turned back into `:` or `/`; nothing else is reworded. No dates are shown, because the files only carry their 2019 upload date.
 - **The videos are played from her Drive, not from this repo.** 1 GB of video in git or on Vercel is not workable.
 
+### Round 5: polish
+- **Card labels**: cards no longer repeat the category their section already implies (the home page's live section, category pages). They show the venue, another category or nothing, plus the date.
+- **Missing images on cards** show the daisy mark instead of printing the title twice.
+- **Share previews**: a 1200×630 default image (`public/brand/og-default.png`, built by `design/og/build-og.mjs`) for the home page and every page without a photo. `og:image` now reports the size of the resized copy that is actually served.
+- **Search**: a button in the header (or `/`, Ctrl/Cmd+K) searches titles of posts, pages and videos. It uses a static index at `/search-index.json`; there is no backend.
+- **Hack leftovers**: images and links to `img0.ibank.toxity.biz` and `redirect.bloggenpucky.net` are never rendered (`BLOCKED_HOSTS` in `lib/markdoc.tsx`). The content files are unchanged.
+
 ## Not done / needs a person
 - **Mark Zaleski video**: `web.archive.org` is blocked from the build environment. The archive captured the URL **with `?_=1`**. The first command in this file left that off, which is why the file committed on `site-v1` is a Wayback HTML page, not a video. It isn't merged, and the site ignores files that aren't real media. From any machine, run:
   `curl -L -o public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4 "https://web.archive.org/web/20180213080202id_/http://www.flowersinagun.com/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4?_=1"`
   then check it with `file public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4`, which must say "ISO Media", before committing.
-- **Make the videos public (Martina, 1 minute)**: in Drive, right-click the `ZoomIn.Tv` folder, choose Share, set General access to "Anyone with the link" with the Viewer role. Until then every video card shows "You need access" when played, and the cards show titles instead of thumbnails. Better long term: upload them to a YouTube channel and fill in `youtubeId`, which gives faster playback and no Drive bandwidth limits.
+- **Make the videos public (Simo or Martina, 1 minute; Simo is now an editor of the folder)**: in Drive, right-click the `ZoomIn.Tv` folder, choose Share, set General access to "Anyone with the link" with the Viewer role. Until then every video card shows "You need access" when played, and the cards show titles instead of thumbnails. Better long term: upload them to a YouTube channel and fill in `youtubeId`, which gives faster playback and no Drive bandwidth limits.
 - **Rights**: these reports were made for ZoomIn.TV, which probably holds the copyright. Martina should confirm she may show them as her portfolio.
 - **Not added from the Drive folder**: 15 untitled raw clips from December 2016 and January 2017 (`2016-12-25 …`, `2017-01-11 …`, `2017-01-12 …` (518 MB), `2017-01-20 …`, `mart1.mp4`, one `.part` file that is an incomplete download), "Trump's daughter asked Milo Yiannopoulous about Jewish control…" (in the folder root, not in ZoomIn.Tv; not clear it's her report) and an audio-only copy of "Drunk Santas". Martina decides which, if any, go up and with what titles.
 - **Keystatic GitHub App**: create it, set the env vars and add Martina as a collaborator (steps in `README.md`). The OAuth callback goes through the trailing-slash redirect (`/callback` → `/callback/`). I expect that to work, but it's unverified until the app exists.
