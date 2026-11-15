@@ -18,6 +18,11 @@ const nextConfig = {
       // WordPress served page 1 of any listing at the listing root.
       { source: '/page/1', destination: '/', permanent: true },
       { source: '/:kind(category|tag|author)/:slug/page/1', destination: '/:kind/:slug/', permanent: true },
+      // Easy ways into the editor; Martina knows /wp-admin from the WordPress days.
+      { source: '/admin', destination: '/keystatic/', permanent: false },
+      { source: '/wp-admin', destination: '/keystatic/', permanent: false },
+      { source: '/wp-admin/:path*', destination: '/keystatic/', permanent: false },
+      { source: '/wp-login.php', destination: '/keystatic/', permanent: false },
     ];
   },
   outputFileTracingExcludes: {

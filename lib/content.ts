@@ -69,7 +69,10 @@ export type Page = {
 };
 
 /** Top-level paths owned by other routes; a post or page slug may not take them. */
-const RESERVED_SLUGS = new Set(['category', 'tag', 'author', 'page', 'feed', 'contributors', 'video', 'keystatic', 'api']);
+const RESERVED_SLUGS = new Set(['category', 'tag', 'author', 'page', 'feed', 'contributors', 'video', 'keystatic', 'api', 'admin', 'wp-admin']);
+
+/** Author used when a post is saved without one (Mart Kawaii, the founder). */
+const DEFAULT_AUTHOR = 'admin';
 
 /** Covers narrower than this are thumbnails; they're upgraded or replaced by a body image. */
 const COVER_MIN_WIDTH = 600;
@@ -160,7 +163,7 @@ async function load(): Promise<Store> {
     rawPosts.map(async ({ slug, entry }): Promise<Post> => {
       const { node } = await entry.content();
       if (!entry.date) throw new Error(`Post "${slug}" has no date`);
-      if (!entry.author) throw new Error(`Post "${slug}" has no author`);
+      // Martina writes almost everything; a post saved without an author is hers rather than a failed build.
       const cats = entry.categories.filter((c): c is string => !!c).map((c) => lookup(categories, c, 'category', slug));
       return {
         kind: 'post',
@@ -168,13 +171,14 @@ async function load(): Promise<Store> {
         path: `/${slug}/`,
         title: entry.title,
         date: entry.date,
-        author: lookup(authors, entry.author, 'author', slug),
+        author: lookup(authors, entry.author || DEFAULT_AUTHOR, 'author', slug),
         categories: cats,
         primaryCategory: cats.find((c) => c.slug !== 'uncategorized') ?? cats[0] ?? null,
         tags: entry.tags.filter((t): t is string => !!t).map((t) => lookup(tags, t, 'tag', slug)),
         venue: entry.venue.trim() || null,
         excerpt: entry.excerpt.trim() || excerptOf(node),
-        ...(await coverOf(entry.featuredImage, node)),
+        // `cover` is the editor's upload (new posts); `featuredImage` is the recovered WordPress path.
+        ...(await coverOf(entry.cover || entry.featuredImage, node)),
         wpId: entry.wpId ?? null,
         originalUrl: entry.originalUrl || null,
         comments: toComments(entry.comments, entry.hideComments),
