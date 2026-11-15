@@ -6,6 +6,8 @@
  * (`/wp-content/...`) render native players; lib/markdoc.tsx drops them if the file is missing.
  */
 
+import { resolveEmbed } from '@/lib/embed-url';
+
 type Spec = { hosts: string[]; label: string } & ({ ratio: number } | { height: (url: URL) => number });
 
 const PROVIDERS: Record<string, Spec> = {
@@ -29,6 +31,7 @@ const LINK_LABELS: Record<string, string> = {
   instagram: 'View on Instagram',
   facebook: 'View on Facebook',
   reverbnation: 'Listen on ReverbNation',
+  bandcamp: 'Listen on Bandcamp',
 };
 
 function parse(src: string): URL | null {
@@ -62,8 +65,12 @@ export function Embed({
     if (provider === 'audio') return <audio src={src} controls preload="metadata" className="w-full" />;
     return null;
   }
-  const url = src ? parse(src) : null;
-  if (!url) return null;
+  const parsed = src ? parse(src) : null;
+  if (!parsed) return null;
+  // Editors may paste a normal page link (youtube.com/watch?v=…) and leave the provider on "auto".
+  const resolved = resolveEmbed(provider, parsed);
+  provider = resolved.provider;
+  const url = resolved.url;
   const spec = provider ? PROVIDERS[provider] : undefined;
 
   if (provider === 'instagram' && caption) {

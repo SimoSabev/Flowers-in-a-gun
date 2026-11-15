@@ -20,32 +20,39 @@ const comments = fields.array(
     depth: fields.integer({ label: 'Reply depth', description: '1 = comment, 2 = reply, 3 = reply to a reply', defaultValue: 1 }),
     text: fields.text({ label: 'Text', multiline: true }),
   }),
-  { label: 'Archived comments', itemLabel: (p) => p.fields.author.value },
+  { label: 'Архив: коментари от стария сайт (не пипай)', itemLabel: (p) => p.fields.author.value },
 );
 
 const hideComments = fields.checkbox({
-  label: 'Hide archived comments on the site',
-  description: 'The comments stay in this file; they are just not shown.',
+  label: 'Архив: скрий старите коментари',
+  description: 'Коментарите остават във файла, просто не се показват.',
   defaultValue: false,
 });
 
 const content = fields.markdoc({
-  label: 'Content',
+  label: 'Текст',
   options: { image: { directory: 'public/images/posts', publicPath: '/images/posts/' } },
   components: {
     embed: block({
-      label: 'Embed (YouTube, SoundCloud, Bandcamp...)',
+      label: 'Видео / музика (YouTube, SoundCloud, Spotify...)',
       schema: {
         provider: fields.select({
-          label: 'Provider',
-          defaultValue: 'youtube',
-          options: ['youtube', 'vimeo', 'soundcloud', 'bandcamp', 'spotify', 'mixcloud', 'reverbnation',
-                    'facebook', 'instagram', 'audio', 'video', 'other'].map((v) => ({ label: v, value: v })),
+          label: 'Източник',
+          description: 'Остави "Автоматично". Сайтът сам разпознава YouTube, Vimeo, SoundCloud, Spotify и Mixcloud.',
+          defaultValue: 'auto',
+          options: [
+            { label: 'Автоматично', value: 'auto' },
+            ...['youtube', 'vimeo', 'soundcloud', 'bandcamp', 'spotify', 'mixcloud', 'reverbnation',
+                'facebook', 'instagram', 'audio', 'video', 'other'].map((v) => ({ label: v, value: v })),
+          ],
         }),
-        src: fields.text({ label: 'Embed URL' }),
+        src: fields.text({
+          label: 'Линк',
+          description: 'Постави линка, както е в браузъра, напр. https://www.youtube.com/watch?v=…',
+        }),
         // Optional, for posts whose player is gone (Instagram): the text readers saw on the old site.
-        caption: fields.text({ label: 'Caption (optional)', multiline: true }),
-        credit: fields.text({ label: 'Credit line (optional)', description: 'e.g. "A post shared by … on Oct 7, 2017"' }),
+        caption: fields.text({ label: 'Надпис (по желание)', multiline: true }),
+        credit: fields.text({ label: 'Автор на видеото (по желание)', description: 'напр. "Видео: …"' }),
       },
     }),
   },
@@ -63,27 +70,41 @@ export default config({
       entryLayout: 'content',
       columns: ['title', 'date'],
       schema: {
-        title: fields.slug({ name: { label: 'Title' } }),
-        date: fields.date({ label: 'Date', defaultValue: { kind: 'today' } }),
-        author: fields.relationship({ label: 'Author', collection: 'authors' }),
-        categories: fields.array(fields.relationship({ label: 'Category', collection: 'categories' }), {
-          label: 'Categories', itemLabel: (p) => p.value ?? '',
+        title: fields.slug({
+          name: { label: 'Заглавие' },
+          slug: { label: 'Адрес в сайта', description: 'Попълва се сам от заглавието. Не го сменяй след публикуване.' },
         }),
-        tags: fields.array(fields.relationship({ label: 'Tag', collection: 'tags' }), {
-          label: 'Tags', itemLabel: (p) => p.value ?? '',
+        date: fields.date({ label: 'Дата', defaultValue: { kind: 'today' } }),
+        author: fields.relationship({
+          label: 'Автор',
+          description: 'Ако го оставиш празно, авторът е Mart Kawaii.',
+          collection: 'authors',
         }),
-        featuredImage: fields.text({ label: 'Featured image path' }),
+        categories: fields.array(fields.relationship({ label: 'Категория', collection: 'categories' }), {
+          label: 'Категории', description: 'Първата се показва на картичката.', itemLabel: (p) => p.value ?? '',
+        }),
+        tags: fields.array(fields.relationship({ label: 'Таг', collection: 'tags' }), {
+          label: 'Тагове (по желание)', itemLabel: (p) => p.value ?? '',
+        }),
+        // Optional upload for new posts; wins over `featuredImage` (the recovered WordPress path).
+        cover: fields.image({
+          label: 'Основна снимка',
+          description: 'Качи снимка. Ако няма, сайтът взима първата снимка от текста.',
+          directory: 'public/images/posts',
+          publicPath: '/images/posts/',
+        }),
         // Optional display fields added for the site design; empty = derived automatically.
-        venue: fields.text({ label: 'Venue (shown on cards, optional)' }),
+        venue: fields.text({ label: 'Място (по желание)', description: 'Клуб или зала, показва се на картичката.' }),
         excerpt: fields.text({
-          label: 'Excerpt (optional)',
-          description: 'Leave empty to use the first ~30 words of the post.',
+          label: 'Кратко описание (по желание)',
+          description: 'Ако е празно, се взимат първите ~30 думи от текста.',
           multiline: true,
         }),
         content,
         // --- archive metadata (kept for redirects / provenance) ---
-        wpId: fields.integer({ label: 'Original WordPress ID' }),
-        originalUrl: fields.text({ label: 'Original URL' }),
+        featuredImage: fields.text({ label: 'Архив: стара основна снимка (не пипай)' }),
+        wpId: fields.integer({ label: 'Архив: WordPress номер (не пипай)' }),
+        originalUrl: fields.text({ label: 'Архив: стар адрес (не пипай)' }),
         hideComments,
         comments,
       },
