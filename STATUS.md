@@ -55,7 +55,7 @@
 - **Hack leftovers**: images and links to `img0.ibank.toxity.biz` and `redirect.bloggenpucky.net` are never rendered (`BLOCKED_HOSTS` in `lib/markdoc.tsx`). The content files are unchanged.
 
 ### Round 6: Mark Zaleski video (November 24, 2026)
-- `public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4` is downloaded from the Wayback capture of the URL with `?_=1` (`web/20180213080202id_/`). It is 13,997,605 bytes, the archive's own content length; `file` says "ISO Media"; the `ftyp`, `mdat` and `moov` atoms are complete and the video runs 59.8 s. The post `mark-zaleski-bands-album-release-at-smalls-jazz-club` already embeds it, so it plays once this is deployed.
+- `public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4` is downloaded from the Wayback capture of the URL with `?_=1` (`web/20180213080202id_/`). It is 13,997,605 bytes, the archive's own content length; `file` says "ISO Media"; the `ftyp`, `mdat` and `moov` atoms are complete and the video runs 59.8 s. The archived file had its `moov` index at the end, so on a slow connection the player stayed a black box until the browser reached the end of the file. The index is now moved to the front ("faststart") without re-encoding: the `mdat` bytes are identical, all 119 chunk offsets were shifted by the `moov` size and each was checked to point at the same bytes as before. The post `mark-zaleski-bands-album-release-at-smalls-jazz-club` already embeds it, so it plays once this is deployed.
 
 ## Not done / needs a person
 - **Rights**: these reports were made for ZoomIn.TV, which probably holds the copyright. Martina should confirm she may show them as her portfolio.
