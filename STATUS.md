@@ -54,13 +54,13 @@
 - **Search**: a button in the header (or `/`, Ctrl/Cmd+K) searches titles of posts, pages and videos. It uses a static index at `/search-index.json`; there is no backend.
 - **Hack leftovers**: images and links to `img0.ibank.toxity.biz` and `redirect.bloggenpucky.net` are never rendered (`BLOCKED_HOSTS` in `lib/markdoc.tsx`). The content files are unchanged.
 
+### Round 6: Mark Zaleski video (November 24, 2026)
+- `public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4` is downloaded from the Wayback capture of the URL with `?_=1` (`web/20180213080202id_/`). It is 13,997,605 bytes, the archive's own content length; `file` says "ISO Media"; the `ftyp`, `mdat` and `moov` atoms are complete and the video runs 59.8 s. The post `mark-zaleski-bands-album-release-at-smalls-jazz-club` already embeds it, so it plays once this is deployed.
+
 ## Not done / needs a person
-- **Mark Zaleski video**: `web.archive.org` is blocked from the build environment. The archive captured the URL **with `?_=1`**. The first command in this file left that off, which is why the file committed on `site-v1` is a Wayback HTML page, not a video. It isn't merged, and the site ignores files that aren't real media. From any machine, run:
-  `curl -L -o public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4 "https://web.archive.org/web/20180213080202id_/http://www.flowersinagun.com/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4?_=1"`
-  then check it with `file public/wp-content/uploads/2017/10/VID_28561110_005603_267.mp4`, which must say "ISO Media", before committing.
 - **Rights**: these reports were made for ZoomIn.TV, which probably holds the copyright. Martina should confirm she may show them as her portfolio.
 - **Not added from the Drive folder**: 15 untitled raw clips from December 2016 and January 2017 (`2016-12-25 …`, `2017-01-11 …`, `2017-01-12 …` (518 MB), `2017-01-20 …`, `mart1.mp4`, one `.part` file that is an incomplete download), "Trump's daughter asked Milo Yiannopoulous about Jewish control…" (in the folder root, not in ZoomIn.Tv; not clear it's her report) and an audio-only copy of "Drunk Santas". Martina decides which, if any, go up and with what titles.
-- **Keystatic GitHub App**: create it, set the env vars and add Martina as a collaborator (steps in `README.md`). The OAuth callback goes through the trailing-slash redirect (`/callback` → `/callback/`). I expect that to work, but it's unverified until the app exists.
+- **Keystatic GitHub App**: the app exists and its env vars are set in Vercel. Checked on November 24, 2026: `/api/keystatic/github/login/` on the live site redirects to GitHub's OAuth page with the app's client ID, and the callback route answers through the trailing-slash redirect (`/callback` → `/callback/`). Still unverified: that Martina is a collaborator on the repo and that a full login and save from her account works.
 - `design/reference-home.html` was never in the repo. The design follows `DESIGN.md` plus the approved screenshot.
 - `NEXT_PUBLIC_CONTACT_EMAIL` is unknown. Until it's set, "Advertise" and "Submit your band" are hidden. The Newsletter link is hidden per `DESIGN.md`.
 - No site search: optional in `CLAUDE.md`. The 404 page links to the home page and the four main categories.
@@ -92,7 +92,7 @@
 ## Next steps
 1. ~~Import the repo in Vercel, deploy and run `05_verify.py`~~ (done, 186/186).
 2. Set `NEXT_PUBLIC_CONTACT_EMAIL` in Vercel (Production) once the address is decided, then redeploy.
-3. Set up the Keystatic GitHub App and env vars; have Martina make a test edit.
+3. ~~Set up the Keystatic GitHub App and env vars~~ (done). Have Martina log in at `/keystatic` and make a test edit.
 4. Martina picks the red or lime logo, reviews the content problems above (especially 2, 4 and 7) and looks for lost photos using `missing_photos_for_martina.csv`.
-5. Download the Mark Zaleski video (corrected command above, with `?_=1`).
+5. ~~Download the Mark Zaleski video~~ (done, see Round 6).
 6. At launch: point DNS at Vercel, make `www.flowersinagun.com` the primary domain (apex redirects to it) and move to Vercel Pro before ads go live.
